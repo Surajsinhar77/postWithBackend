@@ -3,11 +3,13 @@ const cors = require('cors');
 require('dotenv').config();
 const userAuthtication = require('./middleware/userAuthtication.js');
 const connectionToDB = require('./config/db_connection.js');
-
+const cookieParser = require('cookie-parser');
 
 connectionToDB();
 
-const app = express(express.json());
+const app = express();
+app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 
 // routes imports
@@ -16,14 +18,14 @@ const postsRoutes = require('./routes/posts.routes.js');
 const commentsRoutes = require('./routes/comments.routes.js');
 
 // routes
-app.use('/auth' usersRoutes);
+app.use('/auth', usersRoutes);
 app.use('/posts', userAuthtication, postsRoutes);
 app.use('/comments', userAuthtication, commentsRoutes);
 
 
 // server is listening on info
 app.listen(8000, ()=>{
-	console.log("this is the serber")
+	console.log("This is the server")
 });
 
 

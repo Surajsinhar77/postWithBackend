@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken');
 const secretKey = process.env.secretKey;
 
 
-function createUserToken({name,email}){
+function createUserToken({id,email}){
 	return jwt.sign({
-		_id : name,
+		_id : id,
 		email : email
 	},
 		secretKey
