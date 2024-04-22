@@ -3,12 +3,16 @@ import { useState } from "react";
 import { Input, Button } from "@material-tailwind/react";
 
 export default function RegisterPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
+    const [userDetail, SetUserDetail] = useState('');
+    
+    const onInputChange = (e) => {
+        const { name, value } = e.target;
+        SetUserDetail({ ...userDetail, [name]: value });
+    }
 
     const handleRegister = () => {
         // Handle registration logic here
+        
     };
 
     return (
@@ -21,7 +25,8 @@ export default function RegisterPage() {
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="name"
                         label="Name"
-                        onChange={(e) => setName(e.target.value)}
+                        name="name"
+                        onChange={(e) => onInputChange(e)}
                     />
                     
                 </div>
@@ -32,8 +37,8 @@ export default function RegisterPage() {
                         id="email"
                         type="email"
                         label="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        name="email"
+                        onChange={(e) => onInputChange(e)}
                     />
                 </div>
                 <div className="mb-6">
@@ -43,8 +48,8 @@ export default function RegisterPage() {
                         id="password"
                         type="password"
                         label="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        name="password"
+                        onChange={(e) => onInputChange(e)}
                     />
                 </div>
                 <div className="flex flex-col gap-2 items-center justify-between">

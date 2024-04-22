@@ -3,10 +3,12 @@ import { useState } from "react";
 import { Button, Input, Typography } from "@material-tailwind/react";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [userDeatil, setUserDetail] = useState('');
 
-
+  const onInputChange = (e) => {
+    const { name, value } = e.target;
+    setUserDetail({ ...userDeatil, [name]: value });
+  }
 
   const handleLogin = () => {
     // Handle login logic here
@@ -24,7 +26,8 @@ export default function LoginPage() {
             type="email"
             value={email}
             label="Email"
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            onChange={(e) => onInputChange(e)}
           />
         </div>
         <div className="mb-6">
@@ -35,7 +38,8 @@ export default function LoginPage() {
             type="password"
             value={password}
             label="Password"
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            onChange={(e) => onInputChange(e)}
           />
         </div>
         <div className="flex flex-col items-center justify-between gap-2">
