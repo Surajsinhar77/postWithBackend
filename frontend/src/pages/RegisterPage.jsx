@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Input, Button } from "@material-tailwind/react";
+import { Input, Button, Typography } from "@material-tailwind/react";
 
 export default function RegisterPage() {
     const [userDetail, SetUserDetail] = useState('');
@@ -12,12 +12,12 @@ export default function RegisterPage() {
 
     const handleRegister = () => {
         // Handle registration logic here
-        
+
     };
 
     return (
         <div className=" flex flex-col items-center justify-center h-screen gap-3">
-            <h1 className="text-4xl font-bold uppercase">Signup</h1>
+            <h1 className="text-3xl font-bold ">SignUp</h1>
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-80">
                 <div className="mb-4">
                 
@@ -61,10 +61,10 @@ export default function RegisterPage() {
                         Register
                     </Button>
                     <Link
-                        className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+                        className="inline-block align-baseline font-bold text-xm text-blue-500 hover:text-blue-800"
                         to="/login"
                     >
-                        Already have an account? Sign in
+                        <Typography>Already have an account? Login</Typography>
                     </Link>
                 </div>
             </div>
