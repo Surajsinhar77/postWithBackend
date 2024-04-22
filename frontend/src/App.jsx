@@ -1,13 +1,19 @@
-import { useState } from 'react'
 import './App.css';
-import Navbar from './components/Navbar';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import AllRoutes from './common/AllRoutes.jsx';
 
 function App() {
 
+  const notify = (message) => {
+    toast(message);
+  }
+  notify("Welcome to the app!");
   return (
-    <>
-      <Navbar />
-    </>
+    <div className="App">
+      <AllRoutes />
+      <ToastContainer />
+    </div>
   )
 };
 

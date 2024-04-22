@@ -1,8 +1,10 @@
 import React from "react";
-import { Button, Typography } from "@material-tailwind/react";
+import { Button, Collapse, Typography, Input } from "@material-tailwind/react";
 import { FaReply } from "react-icons/fa";
 
 export default function Comments() {
+    const [open, setOpen] = React.useState(false);
+    const toggleOpen = () => setOpen((cur) => !cur);
     return (
         <>
             <div className="container mb-5 mt-5">
@@ -17,7 +19,7 @@ export default function Comments() {
 
                                 <div className="col-md-12">
                                     <div className="media flex">
-                                        <img className="mr-3 rounded-full" alt="Bootstrap Media Preview" src="https://i.imgur.com/stD0Q19.jpg" />
+                                        <img className="mr-3 rounded-full w-10 h-10" alt="Bootstrap Media Preview" src="https://i.imgur.com/stD0Q19.jpg" />
                                         <div className="media-body">
                                             <div className="row ">
                                                 <div className="col-8 flex">
@@ -29,7 +31,7 @@ export default function Comments() {
 
                                                     <div className="float-right reply">
 
-                                                        <button className="flex gap-1 items-center"> <FaReply/> Reply </button> 
+                                                        <button onClick={toggleOpen} className="flex gap-1 items-center"> <FaReply /> Reply </button>
 
                                                     </div>
 
@@ -37,12 +39,25 @@ export default function Comments() {
                                             </div>
 
                                             <Typography>
-                                            It is a long established fact that a reader will be distracted by the readable content of a page.
+                                                It is a long established fact that a reader will be distracted by the readable content of a page.
                                             </Typography>
 
                                             {/* sub Comment 1 */}
+                                            <Collapse open={open}>
+                                                <div className="commentSection">
+                                                    <div className="commentOperation">
+                                                        <div className="row w-[100%] flex flex-row py-3 gap-3">
+                                                            <Input label="Comment" />
+                                                            <div className="forSendBtn">
+                                                                <Button>Send</Button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </Collapse>                                                
                                             <div className="media mt-4 flex">
-                                                <img className="rounded-full" alt="Bootstrap Media Another Preview" src="https://i.imgur.com/xELPaag.jpg" />
+                                                <img className="rounded-full w-10 h-10" alt="Bootstrap Media Another Preview" src="https://i.imgur.com/xELPaag.jpg" />
                                                 <div className="media-body">
 
                                                     <div className="row flex ml-3">
@@ -60,7 +75,7 @@ export default function Comments() {
 
                                             {/* sub Comment 2 */}
                                             <div className="media mt-3 flex">
-                                                <img className="rounded-full" alt="Bootstrap Media Another Preview" src="https://i.imgur.com/nAcoHRf.jpg" />
+                                                <img className="rounded-full w-10 h-10" alt="Bootstrap Media Another Preview" src="https://i.imgur.com/nAcoHRf.jpg" />
                                                 <div className="media-body">
                                                     <div className="row flex ml-3">
                                                         <div className="col-12 flex">
@@ -82,7 +97,7 @@ export default function Comments() {
 
 
                                     <div className="media mt-4 flex">
-                                        <img className="mr-3 rounded-full" alt="Bootstrap Media Preview" src="https://i.imgur.com/xELPaag.jpg" />
+                                        <img className="mr-3 rounded-full w-10 h-10" alt="Bootstrap Media Preview" src="https://i.imgur.com/xELPaag.jpg" />
                                         <div className="media-body">
                                             <div className="row">
                                                 <div className="col-8 flex">
@@ -94,7 +109,7 @@ export default function Comments() {
 
                                                     <div className="float-right reply">
 
-                                                    <Button> <i className="fa fa-reply"></i> reply </Button>
+                                                        <Button> <i className="fa fa-reply"></i> reply </Button>
 
                                                     </div>
 
@@ -105,7 +120,7 @@ export default function Comments() {
 
 
                                             <div className="media mt-4 flex">
-                                                <img className="rounded-full" alt="Bootstrap Media Another Preview" src="https://i.imgur.com/nUNhspp.jpg" />
+                                                <img className="rounded-full w-10 h-10" alt="Bootstrap Media Another Preview" src="https://i.imgur.com/nUNhspp.jpg" />
                                                 <div className="media-body">
 
                                                     <div className="row flex ml-3">
@@ -122,7 +137,7 @@ export default function Comments() {
                                             </div>
 
                                             <div className="media mt-3 flex">
-                                                <img className="rounded-full" alt="Bootstrap Media Another Preview" src="https://i.imgur.com/HjKTNkG.jpg" />
+                                                <img className="rounded-full w-10 h-10" alt="Bootstrap Media Another Preview" src="https://i.imgur.com/HjKTNkG.jpg" />
                                                 <div className="media-body">
                                                     <div className="row flex ml-3">
                                                         <div className="col-12 flex">
@@ -139,9 +154,9 @@ export default function Comments() {
 
 
                                             <div className="media mt-3 flex">
-                                                
-                                                    <img className="rounded-full" alt="Bootstrap Media Another Preview" src="https://i.imgur.com/nAcoHRf.jpg" />
-                                            
+
+                                                <img className="rounded-full w-10 h-10" alt="Bootstrap Media Another Preview" src="https://i.imgur.com/nAcoHRf.jpg" />
+
                                                 <div className="media-body">
                                                     <div className="row flex ml-3">
                                                         <div className="col-12 flex">

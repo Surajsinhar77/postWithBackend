@@ -17,12 +17,12 @@ export default function Post() {
                         <a href="#" className="btn btn-primary">Read More</a>
                     </div>
                     <div className="comment">
-                        <Button  onClick={toggleOpen}>Comments</Button>
+                        <Button onClick={toggleOpen}>Comments</Button>
                     </div>
 
                     <div className="commentSection">
                         <div className="commentOperation">
-                            <div className="row w-[100%] flex flex-row py-3">
+                            <div className="row w-[100%] flex flex-row py-3 gap-3">
                                 <Input label="Comment" />
                                 <div className="forSendBtn">
                                     <Button>Send</Button>
@@ -35,9 +35,7 @@ export default function Post() {
                     <Collapse open={open}>
                         <Card className="my-2 mx-auto w-full">
                             <CardBody>
-                                <Typography>
-                                    <Comments/>
-                                </Typography>
+                                <Comments />
                             </CardBody>
                         </Card>
                     </Collapse>

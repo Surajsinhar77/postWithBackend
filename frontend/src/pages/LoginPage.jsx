@@ -1,47 +1,58 @@
-import {Link, Navigate} from "react-router-dom";
-import { useState} from "react";
-// import axios from "axios";
-// import {UserContext} from "../UserContext.jsx";
+import { Link, Navigate } from "react-router-dom";
+import { useState } from "react";
+import { Button, Input, Typography } from "@material-tailwind/react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [redirect, setRedirect] = useState(false);
-  // const {setUser} = useContext(UserContext);
-  // async function handleLoginSubmit(ev) {
-  //   ev.preventDefault();
-  //   try {
-  //     // const {data} = await axios.post('/login', {email,password});
-  //     // setUser(data);
-  //     alert('Login successful');
-  //     setRedirect(true);
-  //   } catch (e) {
-  //     alert('Login failed');
-  //   }
-  // }
 
-  // if (redirect) {
-  //   return <Navigate to={'/'} />
-  // }
+
+
+  const handleLogin = () => {
+    // Handle login logic here
+  };
 
   return (
-    <div className="mt-4 grow flex items-center justify-around">
-      <div className="mb-64">
-        <h1 className="text-4xl text-center mb-4">Login</h1>
-        <form className="max-w-md mx-auto" >
-          <input type="email"
-                 placeholder="your@email.com"
-                 value={email}
-                 onChange={ev => setEmail(ev.target.value)} />
-          <input type="password"
-                 placeholder="password"
-                 value={password}
-                 onChange={ev => setPassword(ev.target.value)} />
-          <button className="bg-grayy-200">Login</button>
-          <div className="text-center py-2 text-gray-500">
-            Don&apos;t have an account yet? <Link className="underline text-black" to={'/register'}>Register now</Link>
-          </div>
-        </form>
+    <div className="flex flex-col items-center justify-center h-screen gap-3">
+      <Typography className="text-3xl font-bold uppercase">Login</Typography>
+      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-80">
+        <div className="mb-4">
+          
+          <Input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="email"
+            type="email"
+            value={email}
+            label="Email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="mb-6">
+          
+          <Input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            id="password"
+            type="password"
+            value={password}
+            label="Password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col items-center justify-between gap-2">
+          <Button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button"
+            onClick={handleLogin}
+          >
+            Sign In
+          </Button>
+          <Link
+            className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+            to="/register"
+          >
+            Create an account
+          </Link>
+        </div>
       </div>
     </div>
   );
