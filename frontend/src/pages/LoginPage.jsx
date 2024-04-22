@@ -1,8 +1,12 @@
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate , useNavigate} from "react-router-dom";
 import { useState } from "react";
-import { Button, Input, Typography } from "@material-tailwind/react";
+import { Avatar, Button, Input, Typography } from "@material-tailwind/react";
+import api from '../common/api/AuthApi';
+import {toast} from 'react-toastify';
+
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [userDeatil, setUserDetail] = useState('');
 
   const onInputChange = (e) => {
@@ -10,16 +14,32 @@ export default function LoginPage() {
     setUserDetail({ ...userDeatil, [name]: value });
   }
 
-  const handleLogin = () => {
-    // Handle login logic here
+  const notify = (message)=>{
+    toast(message);
+  }
+
+  const handleLogin = async() => {
+    try{
+      const response = await api.post('/auth/login', {email : userDeatil.email, password : userDeatil.password});
+      console.log("This is the document cookie : ",document.cookie);
+      console.log(response.data);
+      notify(response.data.message)
+      navigate('/');
+    }catch(err){
+      console.log("This is the main Error Here ", err);
+      notify(err.message);
+    }
   };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen gap-3">
-      <Typography className="text-3xl font-bold">Login</Typography>
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-80 border">
-        <div className="mb-4">
-          
+      <Typography className="text-3xl font-normal">Login</Typography>
+      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-80 border flex flex-col items-center gap-5">
+        <div className="avaterDiv border-2 rounded-full border-blue-500 p-1">
+          <Avatar src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar" />
+        </div>
+        <div className="">
+
           <Input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="email"
@@ -30,7 +50,7 @@ export default function LoginPage() {
           />
         </div>
         <div className="mb-6">
-          
+
           <Input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
@@ -40,7 +60,7 @@ export default function LoginPage() {
             onChange={(e) => onInputChange(e)}
           />
         </div>
-        <div className="flex flex-col items-center justify-between gap-5">
+        <div className="flex flex-col items-center justify-between gap-2">
           <Button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"

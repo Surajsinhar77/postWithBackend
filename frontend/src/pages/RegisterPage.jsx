@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Input, Button, Typography } from "@material-tailwind/react";
+import { Input, Button, Typography, Avatar } from "@material-tailwind/react";
 
 export default function RegisterPage() {
     const [userDetail, SetUserDetail] = useState('');
-    
+
     const onInputChange = (e) => {
         const { name, value } = e.target;
         SetUserDetail({ ...userDetail, [name]: value });
@@ -18,9 +18,12 @@ export default function RegisterPage() {
     return (
         <div className=" flex flex-col items-center justify-center h-screen gap-3">
             <h1 className="text-3xl font-bold ">SignUp</h1>
-            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-80">
-                <div className="mb-4">
-                
+            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-80 border flex flex-col items-center gap-5">
+                <div className="avaterDiv border-2 rounded-full border-blue-500 p-1">
+                    <Avatar src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar" />
+                </div>
+                <div >
+
                     <Input
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="name"
@@ -28,10 +31,10 @@ export default function RegisterPage() {
                         name="name"
                         onChange={(e) => onInputChange(e)}
                     />
-                    
+
                 </div>
-                <div className="mb-4">
-                    
+                <div>
+
                     <Input
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="email"
@@ -42,7 +45,7 @@ export default function RegisterPage() {
                     />
                 </div>
                 <div className="mb-6">
-                    
+
                     <Input
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                         id="password"
@@ -61,7 +64,7 @@ export default function RegisterPage() {
                         Register
                     </Button>
                     <Link
-                        className="inline-block align-baseline font-bold text-xm text-blue-500 hover:text-blue-800"
+                        className="inline-block align-baseline font-bold text-xm text-center text-blue-500 hover:text-blue-800"
                         to="/login"
                     >
                         <Typography>Already have an account? Login</Typography>
