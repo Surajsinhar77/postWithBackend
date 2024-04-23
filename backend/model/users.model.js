@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const usersSchema = mongoose.Schema({
+const usersSchema = new mongoose.Schema({
 	name : {
 		type : String,
 		required : true,
@@ -20,7 +20,6 @@ const usersSchema = mongoose.Schema({
 	token : {
 		type : String,
 		required : true,
-		unique : true,
 	}
 });
 

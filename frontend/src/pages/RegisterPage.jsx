@@ -1,19 +1,31 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { Input, Button, Typography, Avatar } from "@material-tailwind/react";
+import register from '../common/api/ApiHandler';
+import { useAuth } from "../common/AuthContext";
+import { useNavigate } from "react-router-dom";
+
 
 export default function RegisterPage() {
     const [userDetail, SetUserDetail] = useState('');
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
     const onInputChange = (e) => {
         const { name, value } = e.target;
         SetUserDetail({ ...userDetail, [name]: value });
     }
 
-    const handleRegister = () => {
+    const handleRegister = async() => {
         // Handle registration logic here
-
+        const response = await register(userDetail)
+        console.log("this is on the resgiste use page ", response);
+        if(response){
+            login(response);
+            navigate('/');
+        }
     };
+
 
     return (
         <div className=" flex flex-col items-center justify-center h-screen gap-3">

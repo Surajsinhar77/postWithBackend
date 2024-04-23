@@ -1,6 +1,8 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useAuth } from '../common/AuthContext';
+
 
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
@@ -13,7 +15,13 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example({isloggedin = true}) {
+export default function Example() {
+  const { user} = useAuth();
+
+  const handleLogout = () => {
+    // Handle logout logic here
+    console.log("Logout");
+  }
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -62,7 +70,7 @@ export default function Example({isloggedin = true}) {
 
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 {
-                  isloggedin ? (<>
+                  user ? (<>
                     <button
                       type="button"
                       className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -107,22 +115,22 @@ export default function Example({isloggedin = true}) {
                           </Menu.Item>
                           <Menu.Item>
                             {({ active }) => (
-                              <a
-                                href="#"
+                              <Link
+                                
                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                               >
                                 Settings
-                              </a>
+                              </Link>
                             )}
                           </Menu.Item>
                           <Menu.Item>
                             {({ active }) => (
-                              <a
-                                href="#"
+                              <Link
+                                onClick={handleLogout}
                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                               >
                                 Sign out
-                              </a>
+                              </Link>
                             )}
                           </Menu.Item>
                         </Menu.Items>

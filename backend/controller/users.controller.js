@@ -25,21 +25,21 @@ async function signUpUser(req, res){
             token: token,
         });
 
-        const result = await user.save();
+        const resultuser = await user.save();
 
         const options = {
             httpOnly: true,
             secure: true,
         }
-        res.cookie('accessToken', token, options);
+        res.cookie("accessToken" , token, options);
         res.setHeader('Authorization', `Bearer ${token}`);
         const userResult ={
-            id : result._id,
-            name: result.name,
-            email: result.email,
-            token: result.token,
+            id : resultuser._id,
+            name: resultuser.name,
+            email: resultuser.email,
+            token: resultuser.token,
         }
-        return res.status(201).json({ message: "User is sucessfull SignUp", userResult });
+        return res.status(201).json({ message: "User is sucessfull SignUp", result:  userResult });
     } catch (err) {
         console.log("here is the errror ", err);
         return res.status(404).json({ message: err.message, err });
@@ -91,7 +91,7 @@ async function loginUser(req, res){
             token: userExist.token,
         }
         res.setHeader('Authorization', `Bearer ${authToken}`);
-        return res.json({ message: "You are already login to login ", userResult, userExist : true});
+        return res.json({ message: "You are already login to login ", result : userResult, userExist : true});
     } catch (err) {
         console.log(err);
         res.status(404).json({ message: "You are getting Error", errorMsg: err });
