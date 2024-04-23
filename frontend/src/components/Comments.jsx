@@ -47,7 +47,7 @@ export default function Comments() {
                                                 <div className="commentSection">
                                                     <div className="commentOperation">
                                                         <div className="row w-[100%] flex flex-row py-3 gap-3 border-2">
-                                                            <Input label="Comment" />
+                                                            <Input cls label="Comment" />
                                                             <div className="forSendBtn">
                                                                 <Button>Send</Button>
                                                             </div>
@@ -69,7 +69,7 @@ export default function Comments() {
 
                                                     </div>
 
-                                                    letters, as opposed to using 'Content here, content here', making it look like readable English.
+                                                    {/* letters, as opposed to using 'Content here, content here', making it look like readable English. */}
                                                 </div>
                                             </div>
 

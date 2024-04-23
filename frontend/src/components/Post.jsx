@@ -10,13 +10,13 @@ export default function Post() {
         <>
             <div className="container m-auto  mt-8 py-6 px-4 border-2 ">
                 <div className="card w-[70] m-auto p-8  border-2 bg-gray-100 shadow ">
-                    <div className="card-body ">
+                    <div className="card-body font-light">
 
                         <h5 className="card-title">Post Title</h5>
                         <p className="card-text">Post Content</p>
                         <a href="#" className="btn btn-primary">Read More</a>
                     </div>
-                    <div className="comment">
+                    <div className="comment mt-3 p-1">
                         <Button onClick={toggleOpen}>Comments</Button>
                     </div>
 
