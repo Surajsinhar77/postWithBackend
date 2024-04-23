@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, CardBody, Collapse, Input, Typography } from '@material-tailwind/react';
+import { Button, Card, CardBody, Collapse, Input, } from '@material-tailwind/react';
 import Comments from './Comments';
 
 export default function Post() {
@@ -8,9 +8,9 @@ export default function Post() {
 
     return (
         <>
-            <div className="container m-auto border">
-                <div className="card border w-[50%] m-auto p-6">
-                    <div className="card-body">
+            <div className="container m-auto  mt-8 py-6 px-4 border-2 ">
+                <div className="card w-[70] m-auto p-8  border-2 bg-gray-100 shadow ">
+                    <div className="card-body ">
 
                         <h5 className="card-title">Post Title</h5>
                         <p className="card-text">Post Content</p>
@@ -43,4 +43,4 @@ export default function Post() {
             </div>
         </>
     )
-};
+}

@@ -13,7 +13,8 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example({isloggedin = true}) {
+// eslint-disable-next-line react/prop-types
+export default function Example({isloggedin = false}) {
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
