@@ -13,7 +13,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example({isloggedin = false}) {
+export default function Example({isloggedin = true}) {
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
