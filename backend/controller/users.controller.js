@@ -5,7 +5,7 @@ const serviceAuth = require('../service/serviceAuth.js');
 async function signUpUser(req, res){
     try {
 	    const { name, email, password } = req.body;
-        const isUserExist = await usersModel.findOne({ email: email });
+        const isUserExist = await usersModel.findOne({email: email});
 
         if (isUserExist) {
             return res.status(409).json({
@@ -16,16 +16,18 @@ async function signUpUser(req, res){
         }
 
         const hashPassword = await bcrypt.hash(password, 10);
-        const token = serviceAuth.createUserToken({ name, email });
 
         const user = new usersModel({
             name: name,
             email,
             password: hashPassword,
-            token: token,
+            token: null,
         });
 
         const resultuser = await user.save();
+        const token = serviceAuth.createUserToken({ id: resultuser._id, email: resultuser.email });
+        
+        const updateToken = await usersModel.findOneAndUpdate({ email: email }, { $set: {token: token} }, { new: true })
 
         const options = {
             httpOnly: true,
@@ -34,10 +36,10 @@ async function signUpUser(req, res){
         res.cookie("accessToken" , token, options);
         res.setHeader('Authorization', `Bearer ${token}`);
         const userResult ={
-            id : resultuser._id,
-            name: resultuser.name,
-            email: resultuser.email,
-            token: resultuser.token,
+            id : updateToken._id,
+            name: updateToken.name,
+            email: updateToken.email,
+            token: updateToken.token,
         }
         return res.status(201).json({ message: "User is sucessfull SignUp", result:  userResult });
     } catch (err) {
@@ -104,7 +106,6 @@ async function loginUser(req, res){
 async function logoutUser(req, res){
     try {
         const _id = req.user._id;
-        console.log("This is the id of the user : ", _id);
         const user = await usersModel.findById(_id);
 
         if (!user) {

@@ -7,9 +7,8 @@ const cookieParser = require('cookie-parser');
 
 const app = express();
 
-if(!connectionToDB()){
-  console.log("Database is Failed to connect");
-}
+// Connect to the database
+connectionToDB()
 
 app.use(cors({
   origin: 'http://localhost:5173',

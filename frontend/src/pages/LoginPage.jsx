@@ -3,11 +3,13 @@ import { useState } from "react";
 import { Avatar, Button, Input, Typography } from "@material-tailwind/react";
 import api from '../common/api/AuthApi';
 import {toast} from 'react-toastify';
-
+import { useAuth } from "../common/AuthContext";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [userDeatil, setUserDetail] = useState('');
+  const {login} = useAuth();
+
 
   const onInputChange = (e) => {
     const { name, value } = e.target;
@@ -21,12 +23,17 @@ export default function LoginPage() {
   const handleLogin = async() => {
     try{
       const response = await api.post('/auth/login', {email : userDeatil.email, password : userDeatil.password});
-      
-      notify(response?.data?.message)
-      navigate('/');
+      if(response.status === 200){
+        notify(response.data.message);
+        login(response?.data?.result);
+        navigate('/');
+        return;
+      }
+      navigate('/login');
     }catch(err){
       console.log("This is the main Error Here ", err);
       notify(err.message);
+      navigate('/login');
     }
   };
 
