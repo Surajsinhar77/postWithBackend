@@ -1,0 +1,5 @@
+
+
+MONGO_DB_URL = "mongodb+srv://Suraj:bOQaQQZNeEqyl6jH@atlascluster.aai2jhm.mongodb.net/myNewDataBase"
+
+secretKey = 'kajsdkasdjaq9w807eq9w8eq218'

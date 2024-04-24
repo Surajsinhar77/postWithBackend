@@ -5,9 +5,12 @@ const userAuthtication = require('./middleware/userAuthtication.js');
 const connectionToDB = require('./config/db_connection.js');
 const cookieParser = require('cookie-parser');
 
-connectionToDB();
-
 const app = express();
+
+if(!connectionToDB()){
+  console.log("Database is Failed to connect");
+}
+
 app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true

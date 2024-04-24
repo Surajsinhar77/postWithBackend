@@ -17,11 +17,17 @@ export function AuthProvider({children}) {
         localStorage.setItem('user', JSON.stringify(user));
     }
 
+    function logoutForFrontend(){
+        setUser(null);
+        localStorage.setItem('user', null);
+    }
+
     return (
         <authContext.Provider value={
             {
                 user, 
-                login
+                login,
+                logoutForFrontend,
             }   
         }>
             {children}

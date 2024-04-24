@@ -21,9 +21,8 @@ export default function LoginPage() {
   const handleLogin = async() => {
     try{
       const response = await api.post('/auth/login', {email : userDeatil.email, password : userDeatil.password});
-      console.log("This is the document cookie : ",document.cookie);
-      console.log(response.data);
-      notify(response.data.message)
+      
+      notify(response?.data?.message)
       navigate('/');
     }catch(err){
       console.log("This is the main Error Here ", err);

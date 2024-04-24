@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState , useEffect} from "react";
 import { Input, Button, Typography, Avatar } from "@material-tailwind/react";
-import register from '../common/api/ApiHandler';
+import { register } from '../common/api/ApiHandler';
 import { useAuth } from "../common/AuthContext";
 import { useNavigate } from "react-router-dom";
 
