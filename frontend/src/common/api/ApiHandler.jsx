@@ -12,7 +12,6 @@ const notify = (message) => {
 async function register(userDetail) {
     try {
         const response = await api.post(`/auth/signup`, { name: userDetail.name, email: userDetail.email, password: userDetail.password });
-        console.log(response?.data);
         notify(response.data.message);
         if(response?.data?.result){
             return response.data.result;
@@ -29,7 +28,6 @@ async function register(userDetail) {
 async function logout(){
     try{
         const response = await api.get('/auth/logout');
-        console.log(response?.data);
         notify(response?.data?.result);
         return true;
     }catch(err){

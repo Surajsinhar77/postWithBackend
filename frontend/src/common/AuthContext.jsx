@@ -12,7 +12,6 @@ export function AuthProvider({children}) {
     // const [user, setUser] = useState(null);
 
     function login(user) {
-        console.log('login authContext', user)
         setUser(user);
         localStorage.setItem('user', JSON.stringify(user));
     }
@@ -35,8 +34,7 @@ export function AuthProvider({children}) {
     )
 }
 
-export const useAuth = () => {
-    return useContext(authContext);
-}
+export const useAuth = () =>  useContext(authContext);
+
 
 
