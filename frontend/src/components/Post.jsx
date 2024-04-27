@@ -16,9 +16,9 @@ export default function Post() {
     return (
         <>
             <div className="container m-auto">
-                <div className="card border w-[50%] m-auto">
-                    <div>
-                        <img src="/img/post_image.jpg" alt="post image" />
+                <div className="card border w-[50%] m-auto mt-8">
+                    <div className='p-2'>
+                        <img className='p-2' src="/img/post_image.jpg" alt="post image" />
                     </div>
                     <div className='p-6'>
                         <div className="card-body">
