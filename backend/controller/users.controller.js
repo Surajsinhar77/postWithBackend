@@ -15,33 +15,38 @@ async function signUpUser(req, res){
             });
         }
 
-        const hashPassword = await bcrypt.hash(password, 10);
+        const authToken = req?.cookies?.accessToken;
 
-        const user = new usersModel({
-            name: name,
-            email,
-            password: hashPassword,
-            token: null,
-        });
+        if(!authToken){
+            const hashPassword = await bcrypt.hash(password, 10);
 
-        const resultuser = await user.save();
-        const token = serviceAuth.createUserToken({ id: resultuser._id, email: resultuser.email });
-        
-        const updateToken = await usersModel.findOneAndUpdate({ email: email }, { $set: {token: token} }, { new: true })
+            const user = await usersModel.create({
+                name,
+                email,
+                password : hashPassword,
+            });
 
-        const options = {
-            httpOnly: true,
-            secure: true,
+            const token = serviceAuth.createUserToken({ id: user._id, email: user.email });
+            
+            const updateUserToken = await usersModel.findOneAndUpdate({ email: email }, { $set: {token: token} }, { new: true })
+
+            const options = {
+                httpOnly: true,
+                secure: true,
+            }
+            res.cookie("accessToken" , token, options);
+            res.setHeader('Authorization', `Bearer ${token}`);
+
+            const userResult ={
+                id : updateUserToken._id,
+                name: updateUserToken.name,
+                email: updateUserToken.email,
+                token: updateUserToken.token,
+            }
+
+            return res.status(201).json({ message: "User is sucessfull SignUp", result:  userResult });
         }
-        res.cookie("accessToken" , token, options);
-        res.setHeader('Authorization', `Bearer ${token}`);
-        const userResult ={
-            id : updateToken._id,
-            name: updateToken.name,
-            email: updateToken.email,
-            token: updateToken.token,
-        }
-        return res.status(201).json({ message: "User is sucessfull SignUp", result:  userResult });
+        return res.status(409).json({message : "Another user is already loggedIn"});
     } catch (err) {
         console.log("here is the errror ", err);
         return res.status(404).json({ message: err.message, err });
@@ -115,14 +120,13 @@ async function logoutUser(req, res){
         const token = req.cookies?.accessToken;
         
         if (!token) {
-            return res.status(404).json({ message: "You are not logged in" , logout : true});
+            return res.status(404).json({ message: "You are not loggedIn" , logout : true});
         }
 
         const userLogout = await usersModel.findOneAndUpdate({ _id: _id }, { token: null }, { new: true });
 
         res.clearCookie('accessToken');
         res.setHeader('Authorization', `Bearer ${null}`);
-
         return res.status(200).json({ message: "You are successfully logout", logout : true});
     } catch (error) {
         console.log("This error from the userlogout function : ",error);

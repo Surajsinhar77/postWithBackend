@@ -5,6 +5,7 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import Home from '../pages/Home';
 import { useAuth } from './AuthContext';
+import PageNotFound from '../pages/PageNotFound';
 
 export default function AllRoutes() {
   const { user } = useAuth();
@@ -13,14 +14,15 @@ export default function AllRoutes() {
         {user ? 
           <>
             <Route exact path='/' element={<Home />} />
+            <Route path='*' element={<PageNotFound/>} />
           </>
         :
         <>
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/register' element={<RegisterPage />} />
+          <Route path='/login' element={ <LoginPage /> } />
+          <Route path='/register' element={ <RegisterPage /> } />
+          <Route path='*' element={ <LoginPage/> } />
         </>
         } 
-        <Route path='*' element={<> Page not Found  </>} />
 
       </Routes>
   );
