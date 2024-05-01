@@ -31,7 +31,26 @@ const commentsSchema = new mongoose.Schema({
 
 });
 
+// inner model middleware
+commentsSchema.pre('remove', async function(next) {
+    try {
+        // Get IDs of children comments
+        const childrenIds = this.children;
+
+        // Remove the parent comment
+        await this.model('Comment').deleteOne({ _id: this._id });
+
+        // Remove children comments, if any
+        if (childrenIds && childrenIds.length > 0){
+            await this.model('Comment').deleteMany({ _id: { $in: childrenIds } });
+        }
+
+        next();
+    } catch (err) {
+        next(err);
+    }
+});
 
 const commentModel = mongoose.model('Comment', commentsSchema);
 
-module.export = commentModel;
+module.exports = commentModel;

@@ -51,31 +51,33 @@ async function addNewComment(req, res){
 
 
 async function deleteComment(req, res){
-	try{
-		const commentId = req.params.id;
-		// const _id = new mongoose.Types.ObjectId(commentId); // do we required this or not 
-		const comment = await commentModel.findById({_id : commentId});
+	try {
+        const commentId = req.params.id;
+        const comment = await commentModel.findById(commentId);
 
-		if(!comment){
-			return res.status(404).json({message : "Comment not exist"});
-		}
+		console.log(comment);
+        if(!comment){
+            return res.status(404).json({message : "Comment not exist"});
+        }
 
-		const delComment = await commentModel.findByIdAndDelete({_id : commentId});
-		return res.status(201).json({message :"Comment deleted sucessfully", result : delComment}); 
-	}catch(err){
-		return res.json({message : err.message});
-	}
+        // Trigger the pre('remove') middleware for the deleted comment
+        await comment.remove();
+        
+        return res.status(200).json({message :"Comment deleted successfully"}); 
+    } catch(err) {
+        return res.json({message : err.message});
+    }
 }
 
 async function getAllComments(req, res){
 	try{
 		const postId = req.params.id;
 
-		const allComment = await commentModel.find({post : postId});
+		const allComment = await postsModel.findById(postId).populate('parentComment');
 		if(!allComment){
 			return res.status(404).json({message : "Comment not exist"});
 		}
-		return res.json({message : "Fetch all the comments sucessfully", comments : allComment});
+		return res.json({message : "Fetch all the comments sucessfully", comments : allComment.parentComment});
 	}catch(err){
 		return res.json({message : err.message});
 	}
@@ -145,7 +147,7 @@ async function replyToComment(req, res){
 				$push : { children : newComment?._id}
 			},
 			{ new : true }
-		)
+		).populate('children')
 
 		return res.status(200).json({message : "Comment is sucessfully created", comment : updateMainComment});
 	}catch(err){

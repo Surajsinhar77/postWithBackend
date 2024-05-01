@@ -23,7 +23,7 @@ async function getPostById(req, res){
 			return res.status(401).json({message: "id is invalid or incorrect", id : id});
 		}
 		const _id = new mongoose.Types.ObjectId(id);
-		const post = await postsModel.findOne(_id);
+		const post = await postsModel.findById(_id).populate("parentComment");
 		if(post){
 			return res.status(200).json({message : "Post is sucessfully fetch", post : post});
 		}
