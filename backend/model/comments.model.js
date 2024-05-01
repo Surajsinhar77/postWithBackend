@@ -1,7 +1,18 @@
 const mongoose = require('mongoose');
 
 const commentsSchema = new mongoose.Schema({
-	user :{
+	
+	commentInfo : {
+		type : String,
+		required : true,
+	},
+
+	like : {
+		type : Number,
+		default : 0
+	},
+
+	user : {
 		type : mongoose.Schema.Types.ObjectId,
 		ref : 'User',
 		required : true,
@@ -13,15 +24,11 @@ const commentsSchema = new mongoose.Schema({
 		required : true,
 	},
 
-	commentInfo : {
-		type : String,
-		required : true,
-	},
+	children : [{
+		type : mongoose.Schema.Types.ObjectId,
+		ref : 'Comment',
+	}]
 
-	like : {
-		type : Number,
-		required : true,
-	}
 });
 
 

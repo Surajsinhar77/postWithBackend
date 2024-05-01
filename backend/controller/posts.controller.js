@@ -17,9 +17,8 @@ async function getALLPosts(req, res){
 
 
 async function getPostById(req, res){
-	const id = req.params;
-
 	try{
+		const id = req.params.id;
 		if(!id){
 			return res.status(401).json({message: "id is invalid or incorrect", id : id});
 		}
@@ -38,22 +37,22 @@ async function getPostById(req, res){
 
 
 async function addNewPost(req, res){
-	const postInfo = req.body;
-
 	try{
+		const postInfo = req.body;
 		const postAlreadyExist = await postsModel.findOne({title :postInfo.title});
 		if(postAlreadyExist){
-			return res.json({message : "This post is already exist in our System"});
+			return res.status(409).json({message : "This post is already exist in our System"});
 		}
 
-		const userId = new mongoose.Types.ObjectId(req.query.id);
+		const userId = new mongoose.Types.ObjectId(req.user._id);
+		console.log("User id from add post function : ", userId)
 		const newPost = await postsModel.create({
 			title : postInfo.title,
 			discription : postInfo.discription,
 			user : userId,
 		})
 
-		return res.json({message : "New Post is sucessfully Created and added", post : newPost});
+		return res.status(200).json({message : "New Post is sucessfully Created and added", post : newPost});
 	}catch(err){
 		console.error("This error is in the addNewPost function error", err);
 		return res.json({message : err.message});
@@ -64,7 +63,7 @@ async function updatePostById(req, res){
 	try{
 		const id = req.params.id;
 		const dataToUpdate = req.body;
-		const _id = mongoose.Types.ObjectId(id);
+		const _id = new mongoose.Types.ObjectId(id);
 		const posts = await postsModel.findOne(_id);
 
 		if(!posts){
@@ -75,21 +74,27 @@ async function updatePostById(req, res){
 		//update the postmodel
 		const updateResult = await postsModel.findOneAndUpdate(
 			{_id : _id}, 
-			{ set : {title : dataToUpdate.title}},
+			{ 	
+				$inc : { like : (dataToUpdate && dataToUpdate.like)? 1 : 0},
+				$set : {
+					title : dataToUpdate?.title, 
+					discription: dataToUpdate?.discription 
+				}},
 			{new : true} // return the updated document
 		);
+		return res.status(200).json({message : "Post data Update sucessfully", post : updateResult});
 	}catch(err){
 		return res.json({message : err.message, error : err});
 	}
 };
 
-asunc function delPostById(req, res){
+async function delPostById(req, res){
 	try{
 		const id = req.params.id;
-		const _id = mongoose.Types.ObjectId(id);
-		const postExist = await postsModel.findOne({_id , _id});
+		const _id = new mongoose.Types.ObjectId(id);
+		const postExist = await postsModel.findOne({_id : _id});
 		if(!postExist){
-			return res.status(404).json.({message: "Post not exist / invaild id "});
+			return res.status(404).json({message: "Post not exist / invaild id "});
 		}
 
 		const deletePostResult = await postsModel.deleteOne({_id:_id});

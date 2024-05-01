@@ -25,7 +25,7 @@ const commentsRoutes = require('./routes/comments.routes.js');
 // routes
 app.use('/auth', usersRoutes);
 app.use('/posts', userAuthtication, postsRoutes);
-app.use('/comments', userAuthtication, commentsRoutes);
+app.use('/post/comments', userAuthtication, commentsRoutes);
 
 
 // server is listening on info

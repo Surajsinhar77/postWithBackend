@@ -14,21 +14,21 @@ const postsSchema = new mongoose.Schema({
 
 	like : {
 		type : Number,
-		required : true,
 		default : 0, 
 	},
 
 	user : {
 		type : mongoose.Schema.Types.ObjectId,
-		required : true,
 		ref : 'User',
+		required : true,
 	},
 
-	comment : {
-		type : mongoose.Schema.Types.ObjectId,
-		required : true,
-		ref : 'Comment',
-	}
+	parentComment : [
+		{
+			type : mongoose.Schema.Types.ObjectId,
+			ref : 'Comment'
+		}
+	]
 });
 
 const postsModel = mongoose.model('Post', postsSchema);

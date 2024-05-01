@@ -18,7 +18,7 @@ const verifyToken = (req, res, next) => {
                 return res.status(404).json({message: "token is not found or null"});
             }
         }else{
-            return res.status(403).json({message : "Forbidden"});
+            return res.status(401).json({message : "Authtication Fails"});
         }
     }catch(err){
         console.log(" this is from middleware  catch ",err)
