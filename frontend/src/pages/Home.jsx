@@ -1,6 +1,6 @@
 import Navbar from '../components/Navbar';
 import Post from '../components/Post';
-import {ContactPage} from "../pages/ContactPage"
+// import ContactPage from "../pages/ContactPage"
 
 export default function Home() {
     return (
@@ -8,7 +8,7 @@ export default function Home() {
           
             <Navbar />
             <Post />
-            <ContactPage/> 
+            {/* <ContactPage/>  */}
         </div>
     )
 }
