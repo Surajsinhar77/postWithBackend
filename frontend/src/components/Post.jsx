@@ -60,7 +60,7 @@ export default function Post() {
 
                         <div className="commentSection">
                             <div className="commentOperation">
-                                <div className="row w-[100%] flex flex-row py-3 gap-3">
+                                <div className="row w-[100%] flex flex-row py-3 gap-3">0
                                     <Input label="Comment" />
                                     <div className="forSendBtn">
                                         <Button>Send</Button>
