@@ -41,7 +41,7 @@ async function addNewComment(req, res){
 			{
 				new : true
 			}
-		);
+		).populate('parentComment');
 
 		return res.status(200).json({message : "New Comment is sucessfully created", post : updatePost});
 	}catch(err){
@@ -112,7 +112,7 @@ async function replyToComment(req, res){
 			return res.status(404).json({message : "Main Comment is not exist now"});
 		}
 
-		if(!userId){
+		if(!userId && !userId == undefined && userId === undefined){
 			return res.status(401).json({message : "User is Unauthticated"});
 		}
 

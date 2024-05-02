@@ -3,17 +3,27 @@ const mongoose = require('mongoose');
 
 async function getALLPosts(req, res){
 	try{
-		const posts  = await postsModel.find({});
+		const posts = await postsModel
+			.find({})
+			.populate({
+				path: 'user',
+				select: '-password -token' // Exclude password and token fields
+			})
+			.populate('parentComment')
+			.exec();
+
+		// this way if u dont want to send password and token to the frontend then u can use select('-password -token')
+		// To get infomation of user ref and parentComment ref (foregn key) in yours posts model you can use populate('parentComment').populate('user')
+
 		if(posts){
 			return res.status(200).json({message : "All the posts send sucessfully", posts: posts});
 		}
-		return res.status(404).json({message : "post is empty / Some error while query"});
+		return res.status(404).json({message : "Post is empty / Some error while query"});
 	}catch(err){
 		console.log("This is the error message by doing getALLPosts ", err);
 		return res.status(401).json({message : err.message});
 	}
 };
-
 
 
 async function getPostById(req, res){

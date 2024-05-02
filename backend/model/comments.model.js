@@ -29,7 +29,9 @@ const commentsSchema = new mongoose.Schema({
 		ref : 'Comment',
 	}]
 
-});
+}
+// , { timestamps: true }
+);
 
 // inner model middleware
 commentsSchema.pre('remove', async function(next) {
