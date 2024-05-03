@@ -41,7 +41,7 @@ async function addNewComment(req, res){
 			{
 				new : true
 			}
-		).populate('parentComment');
+		);
 
 		return res.status(200).json({message : "New Comment is sucessfully created", post : updatePost});
 	}catch(err){
@@ -87,7 +87,7 @@ async function getCommentById(req, res){
 	try{
 		const commentId = req.params.id;
 
-		const Comment = await commentModel.findById({_id : commentId});
+		const Comment = await commentModel.findById({_id : commentId}).populate({path:'user', select : '-password -token'});
 		if(!Comment){
 			return res.status(404).json({message : "Comment not exist"});
 		}
@@ -116,12 +116,12 @@ async function replyToComment(req, res){
 			return res.status(401).json({message : "User is Unauthticated"});
 		}
 
-		if(!commentDetail?.postId){
+		if(!commentDetail?.postId && !commentDetail.postId == undefined && commentDetail.postId === undefined){
 			return res.status(402).json({message : "Invaid post id or post"})
 		}
 
 		const _id = new mongoose.Types.ObjectId(commentDetail?.postId);
-		const post = await postsModel.findById(_id);
+		const post = await postsModel.findById(_id); 
 
 		if(!post){
 			return res.status(404).json({message : "Post not exist"});

@@ -4,35 +4,45 @@ import React from "react";
 import { FaReply } from "react-icons/fa";
 import { Button, Collapse, Input } from "@material-tailwind/react";
 
+export default function Childcomment({ comment, re = true }) {
 
-export default function Childcomment(props) {
     const [open, setOpen] = React.useState(false);
     const toggleOpen = () => setOpen((cur) => !cur);
-    const [comment, setComments] = React.useState([]);
-    const [person, setPerson] = React.useState([]);
+
+    const [commentt, setComments] = React.useState([]);
+    const [newComment, setNewComment] = React.useState("");
+
+    const handelInput = (e) => {
+        setNewComment(e.target.value);
+    }
 
     async function GetAllPostsAndComments() {
-        const response = await api.get(`/post/comments/getCommentById/${props.comment}`);
+        const response = await api.get(`/post/comments/getCommentById/${comment}`);
         if (response.status === 200) {
             setComments(response?.data?.comment);
             return response?.data?.comment?.user;
         }
     }
 
-    async function getUserInfo(userId) {
-        const response = await api.get(`/auth/getUser/${userId}`);
-        if (response.status === 200) {
-            setPerson(response?.data?.result);
-        }
-    }
-    useEffect( () => {
-        GetAllPostsAndComments().then((userId) => {
-            getUserInfo(userId);
-        }).catch((err) => {
-            console.log(err);
-        })
-    }, [])
 
+    async function addNewComment() {
+        console.log(comment , commentt.post)
+        if (!comment && comment === undefined && commentt.post === undefined ) {
+            return
+        }
+            const response = await api.post(`/post/comments/replyToComment/${comment}`,{
+                postId: commentt?.post,
+                comment: newComment
+            });
+            if (response.status === 200) {
+                GetAllPostsAndComments();
+                setNewComment("");
+            }
+    }
+
+    useEffect(() => {
+        GetAllPostsAndComments()
+    }, [])
 
 
     return (
@@ -41,26 +51,39 @@ export default function Childcomment(props) {
             <div className="media-body w-full">
                 <div className="row ml-3">
                     <div className="col-12 flex">
-                        <h5>{person?.name}</h5>
+                        <h5>{commentt?.user?.name}</h5>
                         <span>- 3 hours ago</span>
                     </div>
-                    <div className="flex justify-between">
-                        <p> {comment?.commentInfo} </p>
-                        <button onClick={toggleOpen} className="flex gap-1 items-center"> <FaReply /> Reply </button>
-                    </div>
+                    
+                        <div className="flex justify-between">
+                            <p> {commentt?.commentInfo} </p>
+                            {re ?
+                                <button onClick={toggleOpen} className="flex gap-1 items-center"> <FaReply /> Reply </button>
+                            :
+                            ""
+                            }
+                        </div>    
+                        
                 </div>
+
+
                 <Collapse open={open}>
                     <div className="commentSection">
                         <div className="commentOperation">
                             <div className="row w-[100%] flex flex-row py-3 gap-3">
-                                <Input label="Comment" />
+                                <Input value={newComment} label="Comment" onChange={handelInput} />
                                 <div className="forSendBtn">
-                                    <Button>Send</Button>
+                                    <Button onClick={addNewComment}>Send</Button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </Collapse>
+                {
+                    commentt?.children?.map((child, index) => {
+                        return <Childcomment key={index} comment={child} re={false} />
+                    })
+                }
             </div>
         </div>
     )

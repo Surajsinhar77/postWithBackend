@@ -39,7 +39,6 @@ export default function Post({postt}) {
                     </div>
                     <div className='p-6'>
                         <div className="card-body">
-                            {/* <h5 className="card-title text-center">Post Title</h5> */}
                             <div className="user flex gap-2 items-center mb-3">
                                 <Avatar  size="sm" src="/img/post_image.jpg" /> 
                                 <Typography size="sm"> {post?.user?.name} </Typography>
@@ -94,7 +93,9 @@ export default function Post({postt}) {
                         <Collapse open={open}>
                             <Card>
                                 <CardBody>
+                                    
                                     <Comments comment={post?.parentComment} />
+                                      
                                 </CardBody>
                             </Card>
                         </Collapse>

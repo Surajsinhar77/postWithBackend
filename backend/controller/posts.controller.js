@@ -9,7 +9,6 @@ async function getALLPosts(req, res){
 				path: 'user',
 				select: '-password -token' // Exclude password and token fields
 			})
-			.populate('parentComment')
 			.exec();
 
 		// this way if u dont want to send password and token to the frontend then u can use select('-password -token')
