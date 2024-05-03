@@ -3,6 +3,7 @@ import api from "../common/api/AuthApi";
 import React from "react";
 import { FaReply } from "react-icons/fa";
 import { Button, Collapse, Input } from "@material-tailwind/react";
+import { getTimeAgo } from "../utlity/Timeago";
 
 export default function Childcomment({ comment, re = true }) {
 
@@ -44,15 +45,16 @@ export default function Childcomment({ comment, re = true }) {
         GetAllPostsAndComments()
     }, [])
 
-
     return (
         <div className="media mt-4 flex">
             <img className="rounded-full w-10 h-10" alt="Bootstrap Media Another Preview" src="https://i.imgur.com/xELPaag.jpg" />
             <div className="media-body w-full">
                 <div className="row ml-3">
-                    <div className="col-12 flex">
+                    <div className="col-12 flex gap-2 items-center">
                         <h5>{commentt?.user?.name}</h5>
-                        <span>- 3 hours ago</span>
+                        <span className="text-xs text-blue-400">
+                            {commentt?.createdAt ? getTimeAgo(commentt?.createdAt) : ""}
+                        </span>
                     </div>
                     
                         <div className="flex justify-between">

@@ -1,8 +1,9 @@
 import { Typography, Collapse, Input, Button } from "@material-tailwind/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 import { FaReply } from "react-icons/fa";
 import Childcomment from "./Childcomment";
 import api from "../common/api/AuthApi";
+import { getTimeAgo } from "../utlity/Timeago";
 
 export default function Nestedcomments({ commentt }){
     const [open, setOpen] = useState(false);
@@ -44,9 +45,11 @@ export default function Nestedcomments({ commentt }){
             <img className="mr-3 rounded-full w-10 h-10" alt="Bootstrap Media Preview" src="https://i.imgur.com/stD0Q19.jpg" />
             <div className="media-body w-full">
                 <div className="row ">
-                    <div className="col-8 flex">
+                    <div className="col-8 flex gap-2 items-center">
                         <h5>{comment?.user?.name}</h5>
-                        <span>- 2 hours ago</span>
+                        <span className="text-xs text-blue-400">
+                            {comment?.createdAt ? getTimeAgo(comment?.createdAt) : ""}
+                        </span>
                     </div>
                     <div className="col-4">
                         <div className="float-right reply">

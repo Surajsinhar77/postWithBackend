@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Avatar, Button, Card, CardBody, Collapse, Input, Typography } from '@material-tailwind/react';
 import Comments from './Comments';
 import api from '../common/api/AuthApi';
+import {getTimeAgo} from '../utlity/Timeago.js'
 
 export default function Post({postt}) {
     const [post , setPost] = useState(postt)
@@ -12,7 +13,7 @@ export default function Post({postt}) {
     const toggleCaption = () => setFullCaption((cur) => !cur);
 
     const [newComment, setNewComment] = useState("");
-
+    
     async function addNewComment() {
         if(!post?._id && post._id!=undefined && post._id!= "" && post_id != undefined ){
             return
@@ -26,6 +27,7 @@ export default function Post({postt}) {
         }
     }
 
+
     async function handelInput(e) {
         setNewComment(e.target.value);
     }
@@ -33,20 +35,24 @@ export default function Post({postt}) {
     return (
         <>
             <div className="container m-auto">
-                <div className="card border w-[50%] m-auto mt-8">
-                    <div className='p-2'>
-                        <img className='p-2' src="/img/post_image.jpg" alt="post image" />
+                <div className="card border w-[50%] m-auto">
+                    <div>
+                    <img className="h-96 w-full object-cover object-center" src="/img/post_image.jpg" alt="post image" />
                     </div>
                     <div className='p-6'>
                         <div className="card-body">
-                            <div className="user flex gap-2 items-center mb-3">
+                            <div className="user flex gap-2 items-center mb-7">
                                 <Avatar  size="sm" src="/img/post_image.jpg" /> 
-                                <Typography size="sm"> {post?.user?.name} </Typography>
-                            </div>
-                            <div className='px-6 text-gray-600'>
-                                <div className=''>
-                                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. </p>
+                                <div>
+                                    <Typography className='uppercase text-xs'>  {post?.user?.name} </Typography>
+                                    <Typography  className='text-xs'> {getTimeAgo(post?.createdAt)} </Typography>
                                 </div>
+                            </div>
+                            <div className='text-gray-600'>
+                                <div className=''>
+                                    <Typography variant='h6' className='capitalize'> {post?.title } </Typography>
+                                </div>
+                                <hr />
                             </div>
                             <Collapse open={fullCaption} className='mt-0'>
                                 <Card className='mt-0'>
@@ -60,19 +66,19 @@ export default function Post({postt}) {
                             <button onClick={toggleCaption} className="btn btn-primary my-3 text-blue-500">Read More</button>
                         </div>
 
-                        <div className='flex justify-around border border-gray-300 py-3 rounded'>
+                        <div className='flex justify-around py-3 rounded'>
                             <div className="likeBtn">
-                                <Button>
+                                <Button color='purple'>
                                     Like  {post?.like}
                                 </Button>
                             </div>
                             <div className="comment">
-                                <Button onClick={toggleOpen}>
-                                    Comment
+                                <Button onClick={toggleOpen} color='deep-orange'>
+                                    Comment {post?.parentComment?.length}
                                 </Button>
                             </div>
-                            <div className="share">
-                                <Button>
+                            <div className="share" >
+                                <Button color='indigo'>
                                     Share
                                 </Button>
                             </div>
@@ -83,7 +89,7 @@ export default function Post({postt}) {
                                 <div className="row w-[100%] flex flex-row py-3 gap-3">
                                     <Input value={newComment} label="Comment" onChange={(e)=>handelInput(e)}/>
                                     <div className="forSendBtn">
-                                        <Button onClick={addNewComment}>Send</Button>
+                                        <Button color='green' onClick={addNewComment}>Send</Button>
                                     </div>
                                 </div>
 
