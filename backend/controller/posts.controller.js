@@ -54,7 +54,6 @@ async function addNewPost(req, res){
 		}
 
 		const userId = new mongoose.Types.ObjectId(req.user._id);
-		console.log("User id from add post function : ", userId)
 		const newPost = await postsModel.create({
 			title : postInfo.title,
 			discription : postInfo.discription,
