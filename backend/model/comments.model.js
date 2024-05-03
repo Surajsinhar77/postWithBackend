@@ -30,7 +30,7 @@ const commentsSchema = new mongoose.Schema({
 	}]
 
 }
-// , { timestamps: true }
+, { timestamps: true }
 );
 
 // inner model middleware

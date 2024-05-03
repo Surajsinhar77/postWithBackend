@@ -32,7 +32,7 @@ export default function Example() {
   }
 
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure as="nav" className="bg-gray-800 fixed top-0 left-0 right-0 mb-20">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -114,7 +114,7 @@ export default function Example() {
                           <Menu.Item>
                             {({ active }) => (
                               <Link
-                                href="#"
+                                to="/profile"
                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                               >
                                 Your Profile
