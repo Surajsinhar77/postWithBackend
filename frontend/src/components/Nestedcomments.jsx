@@ -1,0 +1,86 @@
+import { Typography, Collapse, Input, Button } from "@material-tailwind/react";
+import { useEffect, useState } from "react";
+import { FaReply } from "react-icons/fa";
+import Childcomment from "./Childcomment";
+import api from "../common/api/AuthApi";
+
+export default function Nestedcomments({ commentt }){
+    const [open, setOpen] = useState(false);
+    const toggleOpen = () => setOpen((cur) => !cur);
+
+    const [comment, setComments] = useState(commentt);
+    const [newComment, setNewComment] = useState("");
+
+    async function getCommentById() {
+        if (commentt === undefined) {
+            return
+        }
+        const response = await api.get(`/post/comments/getCommentById/${commentt}`);
+        if (response.status === 200) {
+            setComments(response?.data?.comment);
+        }
+    }
+
+    async function addNewComment() {
+        if (!commentt && commentt === undefined && comment.post === undefined ) {
+            return
+        }
+            const response = await api.post(`/post/comments/replyToComment/${commentt}`,{
+                postId: comment?.post,
+                comment: newComment
+            });
+            if (response.status === 200) {
+                getCommentById();
+                setNewComment("");
+            }
+    }
+
+    useEffect(() => {
+        getCommentById();
+    }, []);
+
+    return (
+        <div className="media flex mb-3">
+            <img className="mr-3 rounded-full w-10 h-10" alt="Bootstrap Media Preview" src="https://i.imgur.com/stD0Q19.jpg" />
+            <div className="media-body w-full">
+                <div className="row ">
+                    <div className="col-8 flex">
+                        <h5>{comment?.user?.name}</h5>
+                        <span>- 2 hours ago</span>
+                    </div>
+                    <div className="col-4">
+                        <div className="float-right reply">
+                            <button onClick={toggleOpen} className="flex gap-1 items-center"> <FaReply /> Reply </button>
+                        </div>
+                    </div>
+                </div>
+                {
+                    comment ?
+                        <Typography>
+                            {comment?.commentInfo}
+                        </Typography>
+                        :
+                        ""
+                }
+                {/* sub Comment 1 */}
+                <Collapse open={open}>
+                    <div className="commentSection">
+                        <div className="commentOperation">
+                            <div className="row w-[100%] flex flex-row py-3 gap-3">
+                                <Input value={newComment} label="Comment" onChange={(e) => setNewComment(e.target.value)} />
+                                <div className="forSendBtn">
+                                    <Button onClick={addNewComment}>Send</Button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Collapse>
+                {
+                    comment?.children?.map((child, index) => {
+                        return <Childcomment key={index} comment={child} />
+                    })
+                }
+            </div>
+        </div>
+    )
+}

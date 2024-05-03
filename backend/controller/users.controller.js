@@ -135,8 +135,33 @@ async function logoutUser(req, res){
 }
 
 
+async function getUserById(req, res){
+    try {
+	    const id = req?.params?.id;
+        
+        if(!id && id == undefined && id === undefined){
+            return res.json({message: "Undefine given user Id"});
+        }
+        const isUserExist = await usersModel.findById({_id : id}).select('-password -token');
+
+        if (!isUserExist) {
+            return res.status(409).json({
+                error: 'User not Exist',
+                message: 'This user is not exist in our system',
+                userExist: false
+            });
+        }
+        return res.status(200).json({ message: "User is found", result: isUserExist });
+    } catch (err) {
+        console.log("here is the errror ", err);
+        return res.status(404).json({ message: err.message, err });
+    }
+};
+
+
 module.exports = {
 	signUpUser,
 	loginUser,
-    logoutUser
+    logoutUser,
+    getUserById
 }
