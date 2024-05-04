@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
   { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
+  { name: 'AboutUs', href: '/Aboutpage', current: false },
   { name: 'Contact Us', href: '/contactpage', current: false },
 ]
 
@@ -32,7 +32,7 @@ export default function Example() {
   }
 
   return (
-    <Disclosure as="nav" className="bg-gray-800 fixed top-0 left-0 right-0 mb-20">
+    <Disclosure as="nav" className="bg-gray-600 fixed top-0 left-0 right-0 mb-20">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
