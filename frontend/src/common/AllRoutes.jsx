@@ -13,7 +13,6 @@ export default function AllRoutes() {
       <Routes>
         {user ? 
           <>
-            {console.log("User is logged in", user)}
             <Route exact path='/' element={<Home />} />
             <Route path='*' element={<PageNotFound/>} />
           </>
