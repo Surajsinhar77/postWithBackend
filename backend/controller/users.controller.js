@@ -116,14 +116,13 @@ async function logoutUser(req, res){
         if (!user) {
             return res.status(404).json({ message: "User not found" , logout : false});
         }
-
-        const token = req.cookies?.accessToken;
+        const token = req?.cookies?.accessToken;
         
         if (!token) {
             return res.status(404).json({ message: "You are not loggedIn" , logout : true});
         }
 
-        const userLogout = await usersModel.findOneAndUpdate({ _id: _id }, { token: null }, { new: true });
+        const userLogout = await usersModel.findOneAndUpdate({ _id: _id },{ $set : { token : null }}, { new: true });
 
         res.clearCookie('accessToken');
         res.setHeader('Authorization', `Bearer ${null}`);

@@ -47,6 +47,7 @@ export default function Postmodal({GetAllPostsAndComments}) {
       if (response.status === 200) {
         GetAllPostsAndComments();
         notify(response?.data?.message);
+        return;
       }
       toast.error("Something went wrong");
       
@@ -57,7 +58,7 @@ export default function Postmodal({GetAllPostsAndComments}) {
   }
 
   useEffect(() => {
-    setUserData( JSON.parse(user) );
+    setUserData(user);
   },[])
   return (
     <>
