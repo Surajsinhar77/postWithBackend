@@ -1,6 +1,6 @@
 import { Typography } from '@material-tailwind/react';
 import React, { useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+// import { useDropzone } from 'react-dropzone';
 import { FaUpload } from 'react-icons/fa';
 
 function Fileuploader({ onFileUpload }) {
