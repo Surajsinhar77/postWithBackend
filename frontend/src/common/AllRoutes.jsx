@@ -13,6 +13,7 @@ export default function AllRoutes() {
       <Routes>
         {user ? 
           <>
+            {console.log("User is logged in", user)}
             <Route exact path='/' element={<Home />} />
             <Route path='*' element={<PageNotFound/>} />
           </>
@@ -20,7 +21,7 @@ export default function AllRoutes() {
         <>
           <Route path='/login' element={ <LoginPage /> } />
           <Route path='/register' element={ <RegisterPage /> } />
-          <Route path='*' element={ <LoginPage/> } />
+          <Route exact path='*' element={ <LoginPage/> } />
         </>
         } 
 
