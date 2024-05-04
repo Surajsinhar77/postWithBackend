@@ -17,14 +17,16 @@ export default function AllRoutes() {
           <>
             <Route exact path='/' element={<Home />} />
             <Route path='*' element={<PageNotFound/>} />
+            <Route path='/ContactPage' element={ <ContactPage/> } />
+            <Route path='/aboutpage' element={<AboutPage/>}/>
           </>
         :
         <>
           <Route path='/login' element={ <LoginPage /> } />
           <Route path='/register' element={ <RegisterPage /> } />
           <Route path='*' element={ <LoginPage/> } />
-          <Route path='/ContactPage' element={ <ContactPage/> } />
-          <Route path='/aboutpage' element={<AboutPage/>}/>
+        
+          
         </>
         } 
 
