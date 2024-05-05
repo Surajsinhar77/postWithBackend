@@ -4,6 +4,7 @@ require('dotenv').config();
 const userAuthtication = require('./middleware/userAuthtication.js');
 const connectionToDB = require('./config/db_connection.js');
 const cookieParser = require('cookie-parser');
+// const uploadMiddleware = require('./utlity/fileuploader.middleware');
 
 const app = express();
 

@@ -27,3 +27,5 @@ const verifyToken = (req, res, next) => {
 };
 
 module.exports = verifyToken;
+
+// put this in signup to check if user is already exist

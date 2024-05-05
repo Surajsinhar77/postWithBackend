@@ -32,18 +32,18 @@ export default function Postmodal({GetAllPostsAndComments}) {
   }
 
   async function handlePost() {
-    // const formData = new FormData();
-    // formData.append('title', post.title);
-    // formData.append('discription', post.discription);
-    // formData.append('file', file);
     handleOpen();
+    const formData = new FormData();
+    formData.append('title', post.title);
+    formData.append('discription', post.discription);
+    formData.append('file', file);
     try{
       if(!post?.title || !post?.discription){
         notify("Please fill all the fields");
         
         return
       }
-      const response = await api.post('/posts/addNewPost', {title: post.title, discription: post.discription});
+      const response = await api.post('/posts/addNewPost', formData);
       if (response.status === 200) {
         GetAllPostsAndComments();
         notify(response?.data?.message);
