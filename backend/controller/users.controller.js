@@ -20,10 +20,15 @@ async function signUpUser(req, res){
         if(!authToken){
             const hashPassword = await bcrypt.hash(password, 10);
 
+            if(req?.filePath){
+                console.log(req.filePath)
+                return res.json({message : "File path is invalid "});
+            }
             const user = await usersModel.create({
                 name,
                 email,
                 password : hashPassword,
+                profileImage : req.filePath,
             });
 
             const token = serviceAuth.createUserToken({ id: user._id, email: user.email });
