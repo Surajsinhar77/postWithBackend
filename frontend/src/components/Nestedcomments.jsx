@@ -4,6 +4,7 @@ import { FaReply } from "react-icons/fa";
 import Childcomment from "./Childcomment";
 import api from "../common/api/AuthApi";
 import { getTimeAgo } from "../utlity/Timeago";
+import axios from "axios";
 
 export default function Nestedcomments({ commentt }){
     const [open, setOpen] = useState(false);
@@ -16,7 +17,13 @@ export default function Nestedcomments({ commentt }){
         if (commentt === undefined) {
             return
         }
-        const response = await api.get(`/post/comments/getCommentById/${commentt}`);
+        const response = await axios.get(`/post/comments/getCommentById/${commentt}`,{
+            withCredentials: true,
+            headers: {
+                'Content-Type' : 'application/json',
+                'Authorization' : 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token,
+            }
+        });
         if (response.status === 200) {
             setComments(response?.data?.comment);
         }

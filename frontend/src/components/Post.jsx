@@ -4,6 +4,7 @@ import Comments from './Comments';
 import api from '../common/api/AuthApi';
 import {getTimeAgo} from '../utlity/Timeago.js';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const notify = (message) => {
     toast(message, { position: toast.POSITION.TOP_CENTER, autoClose: 2000 })
@@ -24,7 +25,13 @@ export default function Post({postt}) {
             if(!post?._id && post._id!=undefined && post._id!= "" && post_id != undefined ){
                 return
             }
-            const response = await api.post(`/post/comments/addNewComment/${post?._id}`, {comment:newComment});
+            const response = await axios.post(`/post/comments/addNewComment/${post?._id}`, {comment:newComment},{
+                withCredentials: true,
+                headers: {
+                    'Content-Type' : 'application/json',
+                    'Authorization' : 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token,
+                }
+            });
             if (response.status === 200) {
                 post.parentComment.push(response.data?.post?.parentComment[response?.data?.post?.parentComment?.length-1]);
                 setPost(post);

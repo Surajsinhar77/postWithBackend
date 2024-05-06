@@ -18,7 +18,15 @@ export default function Childcomment({ comment, re = true }) {
     }
 
     async function GetAllPostsAndComments() {
-        const response = await api.get(`/post/comments/getCommentById/${comment}`);
+        const response = await api.get(`/post/comments/getCommentById/${comment}`,
+        {
+            withCredentials: true,
+            headers: {
+                'Content-Type' : 'application/json',
+                'Authorization' : 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token,
+            }
+        }
+        );
         if (response.status === 200) {
             setComments(response?.data?.comment);
             return response?.data?.comment?.user;

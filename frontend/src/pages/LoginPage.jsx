@@ -1,14 +1,16 @@
-import { Link, Navigate , useNavigate} from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Avatar, Button, Input, Typography } from "@material-tailwind/react";
 import api from '../common/api/AuthApi';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useAuth } from "../common/AuthContext";
+import axios from "axios";
+import params from "../common/params";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [userDeatil, setUserDetail] = useState('');
-  const {login} = useAuth();
+  const { login } = useAuth();
 
 
   const onInputChange = (e) => {
@@ -16,21 +18,27 @@ export default function LoginPage() {
     setUserDetail({ ...userDeatil, [name]: value });
   }
 
-  const notify = (message)=>{
+  const notify = (message) => {
     toast(message);
   }
 
-  const handleLogin = async() => {
-    try{
-      const response = await api.post('/auth/login', {email : userDeatil.email, password : userDeatil.password});
-      if(response.status === 200){
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(`${params?.baseURL}/auth/login`, { email: userDeatil.email, password: userDeatil.password }, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token,
+        }
+      });
+      if (response.status === 200) {
         notify(response.data.message);
         login(response?.data?.result);
         navigate('/');
         return;
       }
       navigate('/login');
-    }catch(err){
+    } catch (err) {
       console.log("This is the main Error Here ", err);
       notify(err.message);
       navigate('/login');

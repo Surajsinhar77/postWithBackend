@@ -3,13 +3,21 @@ import Post from '../components/Post';
 import { useEffect, useState } from 'react';
 import api from '../common/api/AuthApi';
 import Postmodal from '../components/Postmodal';
+import axios from 'axios';
+import params from '../common/params';
 
 
 export default function Home() {
     let [posts, setPosts] = useState([]);
 
     async function GetAllPostsAndComments() {
-        const response = await api.get('/posts/getAllPosts');
+        const response = await axios.get(`${params.baseURL}/posts/getAllPosts`, {
+            withCredentials: params.withCredentials,
+            headers: {
+                'Content-Type' : 'application/json',
+                'Authorization' : 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token,
+            }
+        });
         if (response.status === 200) {
             setPosts(response?.data?.posts);
         }

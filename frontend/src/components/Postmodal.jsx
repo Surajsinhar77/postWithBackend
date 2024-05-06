@@ -14,17 +14,19 @@ import {
 import { useAuth } from "../common/AuthContext";
 import Fileuploader from "./Fileuploader";
 import { toast } from "react-toastify";
+import axios from "axios";
+import params from "../common/params";
 
 const notify = (message) => {
   toast.success(message);
 }
 
-export default function Postmodal({GetAllPostsAndComments}) {
+export default function Postmodal({ GetAllPostsAndComments }) {
   const { user } = useAuth();
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState(null);
   const handleOpen = () => setOpen(!open);
-  const [userData , setUserData] = React.useState(null);
+  const [userData, setUserData] = React.useState(null);
   const [post, setPost] = React.useState(null);
 
   const handleData = (e) => {
@@ -37,21 +39,27 @@ export default function Postmodal({GetAllPostsAndComments}) {
     formData.append('title', post.title);
     formData.append('discription', post.discription);
     formData.append('file', file);
-    try{
-      if(!post?.title || !post?.discription){
+    try {
+      if (!post?.title || !post?.discription) {
         notify("Please fill all the fields");
-        
+
         return
       }
-      const response = await api.post('/posts/addNewPost', formData);
+      const response = await axios.post(`${params.baseURL}/posts/addNewPost`, formData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token,
+        }
+      });
       if (response.status === 200) {
         GetAllPostsAndComments();
         notify(response?.data?.message);
         return;
       }
       toast.error("Something went wrong");
-      
-    }catch(err){
+
+    } catch (err) {
       console.log(err);
       toast.error(err?.response?.data?.message);
     }
@@ -59,7 +67,7 @@ export default function Postmodal({GetAllPostsAndComments}) {
 
   useEffect(() => {
     setUserData(user);
-  },[])
+  }, [])
   return (
     <>
       <Button onClick={handleOpen} variant="gradient" className="fixed">
@@ -80,8 +88,8 @@ export default function Postmodal({GetAllPostsAndComments}) {
         <DialogBody>
           <div className="mx-4 flex flex-col gap-5">
             <Fileuploader onFileUpload={file} />
-            <Input label="Title*" name="title"  onChange={handleData}/>
-            <Textarea label="Discription*"  name="discription" onChange={handleData}/>
+            <Input label="Title*" name="title" onChange={handleData} />
+            <Textarea label="Discription*" name="discription" onChange={handleData} />
           </div>
         </DialogBody>
         <DialogFooter>

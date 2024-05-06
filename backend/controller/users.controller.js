@@ -60,7 +60,6 @@ async function signUpUser(req, res){
     }
 };
 
-
 async function loginUser(req, res){
     try {
 	    const { email, password } = req.body;
@@ -70,7 +69,6 @@ async function loginUser(req, res){
         }
 
         const authToken = req?.cookies?.accessToken;
-        
         if (!authToken) {
             const userExistInfo = await bcrypt.compare(password, userExist.password);
             if (userExistInfo) {
