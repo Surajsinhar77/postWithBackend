@@ -58,6 +58,7 @@ async function addNewPost(req, res){
 			title : postInfo.title,
 			discription : postInfo.discription,
 			user : userId,
+			postImage : req.cloudinaryUrl
 		})
 
 		return res.status(200).json({message : "New Post is sucessfully Created and added", post : newPost});
@@ -66,6 +67,7 @@ async function addNewPost(req, res){
 		return res.json({message : err.message});
 	}	
 };
+
 
 async function updatePostById(req, res){
 	try{

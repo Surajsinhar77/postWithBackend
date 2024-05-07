@@ -2,9 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { Avatar, Button, Card, CardBody, Collapse, Input, Typography } from '@material-tailwind/react';
 import Comments from './Comments';
 import api from '../common/api/AuthApi';
-import {getTimeAgo} from '../utlity/Timeago.js'
+import {getTimeAgo} from '../utlity/Timeago.js';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import params from '../common/params.json';
+import { useAuth } from '../common/AuthContext.jsx';
+
+const notify = (message) => {
+    toast(message, { position: toast.POSITION.TOP_CENTER, autoClose: 2000 })
+}
 
 export default function Post({postt}) {
+    const {user} = useAuth();
     const [post , setPost] = useState(postt)
 
     const [open, setOpen] = React.useState(false);
@@ -15,15 +24,26 @@ export default function Post({postt}) {
     const [newComment, setNewComment] = useState("");
     
     async function addNewComment() {
-        if(!post?._id && post._id!=undefined && post._id!= "" && post_id != undefined ){
-            return
-        }
-        const response = await api.post(`/post/comments/addNewComment/${post?._id}`, {comment:newComment});
-        if (response.status === 200) {
-            post.parentComment.push(response.data?.post?.parentComment[response?.data?.post?.parentComment?.length-1]);
-            setPost(post);
-            setNewComment("");
-            return
+        try{
+            if(!post?._id && post._id!=undefined && post._id!= "" && post_id != undefined ){
+                return
+            }
+            const response = await axios.post(`${params.baseURL}/post/comments/addNewComment/${post?._id}`, {comment:newComment},{
+                withCredentials: true,
+                headers: {
+                    'Content-Type' : 'application/json',
+                    'Authorization' : 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token,
+                }
+            });
+            if (response.status === 200) {
+                post.parentComment.push(response.data?.post?.parentComment[response?.data?.post?.parentComment?.length-1]);
+                setPost(post);
+                setNewComment("");
+                return
+            }
+        }catch(err){
+            console.log("Error while adding new comment",err)
+            notify(err?.response.data.message);  
         }
     }
 
@@ -37,12 +57,12 @@ export default function Post({postt}) {
             <div className="container m-auto">
                 <div className="card border w-[50%] m-auto">
                     <div>
-                    <img className="h-96 w-full object-cover object-center" src="/img/post_image.jpg" alt="post image" />
+                    <img className="h-96 w-full object-cover object-center" src={post?.postImage} alt="post image" />
                     </div>
                     <div className='p-6'>
                         <div className="card-body">
                             <div className="user flex gap-2 items-center mb-7">
-                                <Avatar  size="sm" src="/img/post_image.jpg" /> 
+                                <Avatar  size="sm" src={post?.user?.profileImage} /> 
                                 <div>
                                     <Typography className='uppercase text-xs'>  {post?.user?.name} </Typography>
                                     <Typography  className='text-xs'> {getTimeAgo(post?.createdAt)} </Typography>
@@ -50,7 +70,7 @@ export default function Post({postt}) {
                             </div>
                             <div className='text-gray-600'>
                                 <div className=''>
-                                    <Typography variant='h6' className='capitalize'> {post?.title } </Typography>
+                                    <Typography variant='h6' className='capitalize'> {post?.title} </Typography>
                                 </div>
                                 <hr />
                             </div>

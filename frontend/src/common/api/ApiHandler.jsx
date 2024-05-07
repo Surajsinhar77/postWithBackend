@@ -1,7 +1,9 @@
 import api from '../api/AuthApi';
 import { toast } from 'react-toastify';
-import { useAuth }  from '../AuthContext';
-import {useNavigate} from 'react-router-dom'
+import { useAuth } from '../AuthContext';
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios';
+import params from '../params.json';
 
 const notify = (message) => {
     toast(message);
@@ -9,31 +11,44 @@ const notify = (message) => {
 
 
 
-async function register(userDetail) {
+async function register(newform) {
     try {
-        const response = await api.post(`/auth/signup`, { name: userDetail.name, email: userDetail.email, password: userDetail.password });
+        const response = await axios.post(`${params?.baseURL}/auth/signup`, newform,
+            {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            }
+        );
         notify(response.data.message);
-        if(response?.data?.result){
+        if (response?.data?.result) {
             return response.data.result;
         }
         return null;
-    }catch(err){
+    } catch (err) {
         console.log(err?.response?.data?.error);
-        notify(err.response.data.message);
+        notify(err?.response?.data?.message);
         return;
     }
 }
 
 
-async function logout(){
-    try{
-        const response = await api.get('/auth/logout');
+async function logout() {
+    try {
+        const response = await axios.get('/auth/logout', {
+            withCredentials: true,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token,
+            }
+        });
         notify(response?.data?.result);
         return true;
-    }catch(err){
+    } catch (err) {
         console.log("The error while logging out is this : ", err?.response?.data?.message);
         notify(err?.response?.data?.message);
-        return null; 
+        return null;
     }
 }
 

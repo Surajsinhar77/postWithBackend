@@ -8,6 +8,7 @@ async function signUpUser(req, res){
         const isUserExist = await usersModel.findOne({email: email});
 
         if (isUserExist) {
+            res.clearCookie('accessToken');
             return res.status(409).json({
                 error: 'User already registered',
                 message: 'The username or email is already taken',
@@ -20,10 +21,17 @@ async function signUpUser(req, res){
         if(!authToken){
             const hashPassword = await bcrypt.hash(password, 10);
 
+            if(!req?.cloudinaryUrl){
+                console.log(req.cloudinaryUrl)
+                res.clearCookie('accessToken');
+                return res.json({message : "File path is invalid "});
+            }
+            
             const user = await usersModel.create({
                 name,
                 email,
                 password : hashPassword,
+                profileImage : req.cloudinaryUrl,
             });
 
             const token = serviceAuth.createUserToken({ id: user._id, email: user.email });
@@ -34,62 +42,62 @@ async function signUpUser(req, res){
                 httpOnly: true,
                 secure: true,
             }
-            res.cookie("accessToken" , token, options);
-            res.setHeader('Authorization', `Bearer ${token}`);
+            
 
             const userResult ={
                 id : updateUserToken._id,
                 name: updateUserToken.name,
                 email: updateUserToken.email,
                 token: updateUserToken.token,
+                profileImage: updateUserToken.profileImage
             }
-
+            res.cookie("accessToken" , token, options);
+            res.setHeader('Authorization', `Bearer ${token}`);
             return res.status(201).json({ message: "User is sucessfull SignUp", result:  userResult });
         }
+        res.setHeader('Authorization', `Bearer ${token}`);
         return res.status(409).json({message : "Another user is already loggedIn"});
     } catch (err) {
+        res.clearCookie('accessToken');
         console.log("here is the errror ", err);
         return res.status(404).json({ message: err.message, err });
     }
 };
-
 
 async function loginUser(req, res){
     try {
 	    const { email, password } = req.body;
         const userExist = await usersModel.findOne({ email: email });
         if (!userExist) {
+            res.clearCookie('accessToken');
+            res.setHeader('Authorization', `Bearer ${null}`);
             return res.json({ message: "user doesn't Exist" });
         }
 
         const authToken = req?.cookies?.accessToken;
-        
         if (!authToken) {
             const userExistInfo = await bcrypt.compare(password, userExist.password);
             if (userExistInfo) {
                 const token = serviceAuth.createUserToken({ id: userExist._id, email: userExist.email });
 
-                const updateToken = await usersModel.findOneAndUpdate({ email: email }, { token: token }, { new: true } );
-                const userResult = {
-                    id : updateToken._id,
-                    name: updateToken.name,
-                    email: updateToken.email,
-                    token: updateToken.token,
-                }
+                const updateToken = await usersModel.findOneAndUpdate({ email: email }, { token: token }, { new: true } ).select('-password -__v');
+               
                 const options = {
                     httpOnly: true,
                     secure: true,
                 }
+
                 res.cookie("accessToken" , token, options);
                 res.setHeader('Authorization', `Bearer ${token}`);
                 
                 return res.status(200).json({
                     message: "You are SuccessFull logged in",
-                    result: userResult, 
+                    result: updateToken, 
                     userExist : userExistInfo
                 })
             }
-            
+            res.clearCookie('accessToken');
+            res.setHeader('Authorization', `Bearer ${null}`);
             return res.status(404).json({ message: "Invalid Credintial", userExistInfo });
         }
         const userResult = {
@@ -97,6 +105,7 @@ async function loginUser(req, res){
             name: userExist.name,
             email: userExist.email,
             token: userExist.token,
+            profileImage: userExist.profileImage
         }
         res.setHeader('Authorization', `Bearer ${authToken}`);
         return res.json({ message: "You are already login to login ", result : userResult, userExist : true});
@@ -111,7 +120,7 @@ async function loginUser(req, res){
 async function logoutUser(req, res){
     try {
         const _id = req.user._id;
-        const user = await usersModel.findById(_id);
+        const user = await usersModel.findById(_id).select('-password -token');
 
         if (!user) {
             return res.status(404).json({ message: "User not found" , logout : false});
@@ -122,7 +131,7 @@ async function logoutUser(req, res){
             return res.status(404).json({ message: "You are not loggedIn" , logout : true});
         }
 
-        const userLogout = await usersModel.findOneAndUpdate({ _id: _id },{ $set : { token : null }}, { new: true });
+        const userLogout = await usersModel.findOneAndUpdate({ _id: _id },{ $set : { token : null }}, { new: true }).select('-password -token');
 
         res.clearCookie('accessToken');
         res.setHeader('Authorization', `Bearer ${null}`);
@@ -150,13 +159,13 @@ async function getUserById(req, res){
                 userExist: false
             });
         }
+
         return res.status(200).json({ message: "User is found", result: isUserExist });
     } catch (err) {
         console.log("here is the errror ", err);
         return res.status(404).json({ message: err.message, err });
     }
 };
-
 
 module.exports = {
 	signUpUser,

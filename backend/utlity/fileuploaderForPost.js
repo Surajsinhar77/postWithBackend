@@ -13,7 +13,7 @@ cloudinary.config({
 // Set up storage for uploaded files locally
 const localDiskStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/profile-images/');
+    cb(null, 'uploads/post-img/');
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + file.originalname);
@@ -35,13 +35,12 @@ const upload = multer({
 }).single('file');
 
 // Middleware function to handle file upload
-const uploadMiddleware = (req, res, next) => {
+const uploadPostMiddleware = (req, res, next) => {
   try {
-    // const authToken = req?.cookies?.accessToken;
-
-    // if (!authToken) {
-    //   return res.status(401).json({ message: 'You are not logged in' });
-    // }
+    const authToken = req?.cookies?.accessToken;
+    if (!authToken) {
+      return res.status(401).json({ message: 'You are not logged in' });
+    }
 
     upload(req, res, (err) => {
       if (err instanceof multer.MulterError) {
@@ -54,7 +53,7 @@ const uploadMiddleware = (req, res, next) => {
 
       // File uploaded successfully to local storage
       // Proceed to Cloudinary upload
-      cloudinary.uploader.upload(req.file.path, { folder: 'uploads/profile-images' }, (cloudinaryErr, result) => {
+      cloudinary.uploader.upload(req.file.path, { folder: 'uploads/post-img' }, (cloudinaryErr, result) => {
         if (cloudinaryErr) {
           // An error occurred when uploading to Cloudinary
           return res.status(400).json({ message: 'Cloudinary upload error', error: cloudinaryErr });
@@ -80,4 +79,4 @@ const uploadMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = uploadMiddleware;
+module.exports = uploadPostMiddleware;
