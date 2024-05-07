@@ -8,6 +8,7 @@ import { useAuth } from './AuthContext';
 import PageNotFound from '../pages/PageNotFound';
 import ContactPage from '../pages/ContactPage';
 import AboutPage from '../pages/AboutPage';
+import Navbar from '../components/Navbar';
 
 export default function AllRoutes() {
   const { user } = useAuth();
@@ -16,7 +17,6 @@ export default function AllRoutes() {
         {user ? 
           <>
             <Route exact path='/' element={<Home />} />
-            <Route path='*' element={<PageNotFound/>} />
             <Route path='/ContactPage' element={ <ContactPage/> } />
             <Route path='/aboutpage' element={<AboutPage/>}/>
           </>
@@ -28,6 +28,7 @@ export default function AllRoutes() {
         </>
         } 
 
+        <Route path='*' element={<PageNotFound/>} />
       </Routes>
   );
 }

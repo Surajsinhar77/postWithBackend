@@ -2,20 +2,25 @@ import './App.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AllRoutes from './common/AllRoutes.jsx';
-
+import Navbar from './components/Navbar';
+import { useAuth } from './common/AuthContext.jsx';
+const notify = (message) => {
+  toast(message);
+}
 
 function App() {
-
-  const notify = (message) => {
-    toast(message);
-  }
+  const { user } = useAuth(); 
   notify("Welcome to the app!");
+
   return (
     <div className="App">
+      {user?
+        <Navbar />
+        :
+        null
+      }
       <AllRoutes />
-      
       <ToastContainer />
-      
     </div>
   )
 }

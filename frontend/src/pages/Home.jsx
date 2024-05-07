@@ -29,7 +29,6 @@ export default function Home() {
 
     return (
         <div>
-            <Navbar />
             <div className="container pt-20 m-auto">
                 <Postmodal GetAllPostsAndComments={GetAllPostsAndComments} />
                 <div className="postContainer  flex flex-col gap-6 overflow-hidden">

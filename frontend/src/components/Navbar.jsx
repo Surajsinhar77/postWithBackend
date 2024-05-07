@@ -19,14 +19,14 @@ function classNames(...classes) {
 }
 
 export default function Example() {
-  const { user, logoutForFrontend} = useAuth();
+  const { user, logoutForFrontend } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     // Handle logout logic here
 
     const res = await logout();
-    if(res){
+    if (res) {
       logoutForFrontend();
       navigate('/login');
     }
@@ -52,11 +52,13 @@ export default function Example() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                  />
+                  <Link to={'/'}>
+                    <img
+                      className="h-8 w-auto"
+                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                      alt="Your Company"
+                    />
+                  </Link>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
@@ -125,7 +127,7 @@ export default function Example() {
                           <Menu.Item>
                             {({ active }) => (
                               <Link
-                                
+
                                 className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                               >
                                 Settings
