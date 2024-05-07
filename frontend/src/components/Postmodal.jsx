@@ -39,6 +39,8 @@ export default function Postmodal({ GetAllPostsAndComments }) {
     formData.append('title', post.title);
     formData.append('discription', post.discription);
     formData.append('file', file);
+
+
     try {
       if (!post?.title || !post?.discription) {
         notify("Please fill all the fields");
@@ -48,7 +50,7 @@ export default function Postmodal({ GetAllPostsAndComments }) {
       const response = await axios.post(`${params.baseURL}/posts/addNewPost`, formData, {
         withCredentials: true,
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
           'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token,
         }
       });
@@ -58,7 +60,6 @@ export default function Postmodal({ GetAllPostsAndComments }) {
         return;
       }
       toast.error("Something went wrong");
-
     } catch (err) {
       console.log(err);
       toast.error(err?.response?.data?.message);
@@ -87,8 +88,8 @@ export default function Postmodal({ GetAllPostsAndComments }) {
         </DialogHeader>
         <DialogBody>
           <div className="mx-4 flex flex-col gap-5">
-            <Fileuploader onFileUpload={file} />
-            <Input label="Title*" name="title" onChange={handleData} />
+            <Fileuploader file={file} setFile={setFile}  />
+            <Input  label="Title*" name="title" onChange={handleData} />
             <Textarea label="Discription*" name="discription" onChange={handleData} />
           </div>
         </DialogBody>

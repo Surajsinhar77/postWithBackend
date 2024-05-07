@@ -11,7 +11,7 @@ export default function RegisterPage() {
     const [selectedFile, setSelectedFile] = useState(null);
     const [userDetail, SetUserDetail] = useState('');
     const { login } = useAuth();
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
     const onInputChange = (e) => {
@@ -43,13 +43,11 @@ export default function RegisterPage() {
         newform.append('file', selectedFile);
 
         const response = await register(newform)
-        console.log("this is on the resgiste use page ", response);
         if(response){
             login(response);
             navigate('/');
         }
     };
-
 
     function OnClose(){
         setOpen(false);
@@ -58,7 +56,6 @@ export default function RegisterPage() {
     function OnOpen(){
         setOpen(true);
     }
-
 
     return (
         <div className=" flex flex-col items-center justify-center h-screen gap-3">

@@ -68,6 +68,7 @@ async function addNewPost(req, res){
 	}	
 };
 
+
 async function updatePostById(req, res){
 	try{
 		const id = req.params.id;

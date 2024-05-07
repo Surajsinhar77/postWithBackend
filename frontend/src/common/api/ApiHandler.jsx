@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
-const params = require('../api/params.json');
+import params from '../params.json';
 
 const notify = (message) => {
     toast(message);
@@ -11,18 +11,15 @@ const notify = (message) => {
 
 
 
-async function register({ newform }) {
+async function register(newform) {
     try {
-
-        const response = await axios.post(`${params?.baseURL}/auth/signup`, { name: newform.name, email: newform.email, password: newform.password, file: newform.file },
+        const response = await axios.post(`${params?.baseURL}/auth/signup`, newform,
             {
                 withCredentials: true,
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token,
+                    'Content-Type': 'multipart/form-data',
                 }
             }
-
         );
         notify(response.data.message);
         if (response?.data?.result) {
@@ -31,7 +28,7 @@ async function register({ newform }) {
         return null;
     } catch (err) {
         console.log(err?.response?.data?.error);
-        notify(err.response.data.message);
+        notify(err?.response?.data?.message);
         return;
     }
 }

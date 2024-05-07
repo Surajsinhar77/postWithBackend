@@ -13,7 +13,6 @@ function ProfilePicUploader({ isOpen, onClose , onOpen, selectedFile, setSelecte
 
   const handleSubmit = () => {
     // Handle file upload here
-    console.log(selectedFile);
     // Reset selected file state
     setSelectedFile(null);
     // Close the dialog
@@ -97,7 +96,7 @@ function ProfilePicUploader({ isOpen, onClose , onOpen, selectedFile, setSelecte
       )
       :
       <Tooltip content="Upload yours profile picture">
-        <Avatar onClick={onOpen} src={URL.createObjectURL(selectedFile)} alt="avatar" />
+        <Avatar onClick={onOpen} src={selectedFile? URL.createObjectURL(selectedFile): "https://docs.material-tailwind.com/img/face-2.jpg"} alt="avatar" />
       </Tooltip>
   );
 }

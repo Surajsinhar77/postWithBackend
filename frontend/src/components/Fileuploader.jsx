@@ -3,13 +3,10 @@ import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { FaUpload } from 'react-icons/fa';
 
-function Fileuploader({ onFileUpload }) {
-  const [selectedFile, setSelectedFile] = useState(null);
+function Fileuploader({ file, setFile }) {
 
   const onDrop = (acceptedFiles) => {
-    // Handle file upload
-    // onFileUpload(acceptedFiles);
-    setSelectedFile(acceptedFiles[0]);
+    setFile(acceptedFiles[0]);
   };
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
@@ -22,7 +19,7 @@ function Fileuploader({ onFileUpload }) {
 
       <div
         {...getRootProps()}
-        className={`border border-dashed border-gray-400 rounded-lg p-8 flex flex-col items-center justify-center space-y-4 ${selectedFile ? 'file-selected' : ''}`}
+        className={`border border-dashed border-gray-400 rounded-lg p-8 flex flex-col items-center justify-center space-y-4 ${file ? 'file-selected' : ''}`}
       >
         <input {...getInputProps()} />
         <FaUpload name="cloud_upload" color="blue" />
@@ -30,8 +27,8 @@ function Fileuploader({ onFileUpload }) {
         
       )} */}
 
-        {selectedFile ?
-          <p className="text-gray-600">{selectedFile?.name}</p>
+        {file ?
+          <p className="text-gray-600">{file?.name}</p>
           :
           <p className="text-gray-600">
             Drag & drop files here, or click to select files
