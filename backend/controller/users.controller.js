@@ -55,7 +55,7 @@ async function signUpUser(req, res){
             res.setHeader('Authorization', `Bearer ${token}`);
             return res.status(201).json({ message: "User is sucessfull SignUp", result:  userResult });
         }
-        res.setHeader('Authorization', `Bearer ${token}`);
+        res.setHeader('Authorization', `Bearer ${authToken}`);
         return res.status(409).json({message : "Another user is already loggedIn"});
     } catch (err) {
         res.clearCookie('accessToken');
