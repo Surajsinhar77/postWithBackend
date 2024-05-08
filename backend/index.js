@@ -13,7 +13,7 @@ const app = express();
 connectionToDB()
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://postwithbackend.onrender.com'],
+  origin: ['http://localhost:5173', 'https://68b1ef51-ca7b-41f7-9542-b48746f259c4.e1-us-east-azure.choreoapps.dev/'],
   credentials: true
 }));
 app.use(express.json());
