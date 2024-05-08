@@ -24,7 +24,6 @@ export default function Home() {
         }
     }
 
-
     useEffect(() => {
         GetAllPostsAndComments();
         toast.success("Welcome to the Home Page");
