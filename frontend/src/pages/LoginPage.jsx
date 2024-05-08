@@ -11,19 +11,35 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [userDeatil, setUserDetail] = useState('');
   const { login } = useAuth();
-
+  const [loading, setLoading] = useState(false);
 
   const onInputChange = (e) => {
     const { name, value } = e.target;
     setUserDetail({ ...userDeatil, [name]: value });
   }
 
-  const notify = (message) => {
-    toast(message);
+  const notify = (message, { type }) => {
+    if (type) {
+      toast.success(message);
+      return;
+    }
+    toast.error(message);
   }
 
   const handleLogin = async () => {
     try {
+      setLoading(true);
+      if (!userDeatil.email || !userDeatil.password) {
+        if (!userDeatil.email) {
+          notify("Please enter the email", false);
+        } else if (!userDeatil.password) {
+          notify("Please enter the password", false);
+        } else {
+          notify("Please fill all the fields", false);
+        }
+        setLoading(false);
+        return;
+      }
       const response = await axios.post(`${params?.baseURL}/auth/login`, { email: userDeatil.email, password: userDeatil.password }, {
         withCredentials: true,
         headers: {
@@ -32,16 +48,22 @@ export default function LoginPage() {
         }
       });
       if (response.status === 200) {
-        notify(response.data.message);
-        login(response?.data?.result);
-        navigate('/');
-        return;
+        if(response?.data?.result){
+          login(response.data.result);
+          notify(response.data.message, { type: true });
+          setLoading(false);
+          navigate('/');
+          return;
+        }
+        throw new Error(response.data.message);
       }
       navigate('/login');
+      setLoading(false);
     } catch (err) {
       console.log("This is the main Error Here ", err);
-      notify(err.message);
+      notify(err.message, { type: false });
       navigate('/login');
+      setLoading(false);
     }
   };
 
@@ -79,6 +101,7 @@ export default function LoginPage() {
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
             onClick={handleLogin}
+            loading={loading}
           >
             Sign In
           </Button>

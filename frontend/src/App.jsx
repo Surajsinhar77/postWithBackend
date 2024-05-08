@@ -10,8 +10,6 @@ const notify = (message) => {
 
 function App() {
   const { user } = useAuth(); 
-  notify("Welcome to the app!");
-
   return (
     <div className="App">
       {user?

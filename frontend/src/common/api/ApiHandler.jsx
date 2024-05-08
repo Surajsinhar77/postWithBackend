@@ -5,11 +5,13 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import params from '../params.json';
 
-const notify = (message) => {
-    toast(message);
+const notify = (message, {type}) => {
+    if(type) {
+        toast.success(message);
+    } else {
+        toast.error(message);
+    }
 }
-
-
 
 async function register(newform) {
     try {
@@ -21,14 +23,14 @@ async function register(newform) {
                 }
             }
         );
-        notify(response.data.message);
+        notify(response.data.message, {type: true});
         if (response?.data?.result) {
             return response.data.result;
         }
         return null;
     } catch (err) {
         console.log(err?.response?.data?.error);
-        notify(err?.response?.data?.message);
+        notify(err?.response?.data?.message , {type: false});
         return;
     }
 }
@@ -36,18 +38,21 @@ async function register(newform) {
 
 async function logout() {
     try {
-        const response = await axios.get('/auth/logout', {
+        const response = await axios.get(`${params?.baseURL}/auth/logout`, {
             withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token,
             }
         });
-        notify(response?.data?.result);
-        return true;
+        if(response?.status === 200) {
+            notify(response?.data?.message,  {type : true} );
+            return true;
+        }   
+        throw new Error(response?.data?.message);    
     } catch (err) {
         console.log("The error while logging out is this : ", err?.response?.data?.message);
-        notify(err?.response?.data?.message);
+        notify(err?.response?.data?.message,  {type: false} );
         return null;
     }
 }

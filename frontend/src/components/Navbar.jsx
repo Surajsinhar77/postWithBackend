@@ -5,7 +5,11 @@ import { useAuth } from '../common/AuthContext';
 import { Link } from 'react-router-dom';
 import { logout } from '../common/api/ApiHandler';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
+async function notify(message) {
+  toast(message)
+}
 
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
@@ -26,10 +30,13 @@ export default function Example() {
     // Handle logout logic here
 
     const res = await logout();
-    if (res) {
+    if (res===true) {
       logoutForFrontend();
       navigate('/login');
+      return
     }
+    navigate('/');
+    notify('Failed to logout!');
   }
 
   return (

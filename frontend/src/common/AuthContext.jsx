@@ -4,7 +4,7 @@ import { useContext, createContext } from "react";
 
 const authContext = createContext();
 
-export function AuthProvider({children}) {
+export function AuthProvider({ children }) {
     const [user, setUser] = useState(() => {
         const storedData = localStorage.getItem('user');
         return storedData ? JSON.parse(storedData) : null;
@@ -14,9 +14,10 @@ export function AuthProvider({children}) {
     function login(user) {
         setUser(user);
         localStorage.setItem('user', JSON.stringify(user))
+
     }
 
-    function logoutForFrontend(){
+    function logoutForFrontend() {
         setUser(null);
         localStorage.removeItem('user');
     }
@@ -24,17 +25,17 @@ export function AuthProvider({children}) {
     return (
         <authContext.Provider value={
             {
-                user, 
+                user,
                 login,
                 logoutForFrontend,
-            }   
+            }
         }>
             {children}
         </authContext.Provider>
     )
 }
 
-export const useAuth = () =>  useContext(authContext);
+export const useAuth = () => useContext(authContext);
 
 
 
