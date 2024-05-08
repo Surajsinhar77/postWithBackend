@@ -5,6 +5,7 @@ const userAuthtication = require('./middleware/userAuthtication.js');
 const connectionToDB = require('./config/db_connection.js');
 const cookieParser = require('cookie-parser');
 // const uploadMiddleware = require('./utlity/fileuploader.middleware');
+const port = process.env.PORT || 7000;
 
 const app = express();
 
@@ -30,7 +31,7 @@ app.use('/post/comments', userAuthtication, commentsRoutes);
 
 
 // server is listening on info
-app.listen(8000, ()=>{
+app.listen(port, ()=>{
 	console.log("This is the server")
 });
 
