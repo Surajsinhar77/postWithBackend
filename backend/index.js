@@ -5,7 +5,7 @@ const userAuthtication = require('./middleware/userAuthtication.js');
 const connectionToDB = require('./config/db_connection.js');
 const cookieParser = require('cookie-parser');
 // const uploadMiddleware = require('./utlity/fileuploader.middleware');
-const port = process.env.PORT || 7000;
+const port = process.env.PORT || 8000;
 
 const app = express();
 
