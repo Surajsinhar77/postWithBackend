@@ -7,9 +7,17 @@ export default function ContactPage() {
 
 
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    // send backend 
+    try {
+      //data bhej rhe backend ko 
+     const response = await axios.post("apiadd krna hai " , name,email,message)
+     console.log(response.data) // handle sucess response
+      
+    } catch (error) {
+      console.error("Error submitting form", error)
+      
+    }
   }
 
   return (

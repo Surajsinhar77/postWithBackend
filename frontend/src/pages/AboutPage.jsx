@@ -16,7 +16,7 @@ const TeamMembers = [
     name: 'Kauhal Kishor',
     imageUrl: 'https://shorturl.at/nrsNW', 
     socialLinks: {
-      linkedin: 'https://www.linkedin.com/in/johndoe',
+      linkedin: 'https://www.linkedin.com/in/kaushal-kishor-16ba9b1bb/',
       twitter: 'https://twitter.com/johndoe',
     },
     
@@ -26,7 +26,7 @@ const TeamMembers = [
 
 const AboutPage = () => {
   return (
-    <div className="min-h-screen bg-gray-100 py-12 mt-4">
+    <div className="min-h-screen bg-gray-100 py-12 mt-8 items-center">
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold mb-8">About Our Project</h1>
         <p className="text-lg mb-8">
