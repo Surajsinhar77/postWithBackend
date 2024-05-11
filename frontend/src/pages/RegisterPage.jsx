@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import { useState , useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Input, Button, Typography, Avatar } from "@material-tailwind/react";
 import { register } from '../common/api/ApiHandler';
 import { useAuth } from "../common/AuthContext";
 import { useNavigate } from "react-router-dom";
-import ProfilePicUploader  from '../components/ProfilePicUploader';
+import ProfilePicUploader from '../components/ProfilePicUploader';
 import { toast } from "react-toastify";
 
 export default function RegisterPage() {
@@ -12,6 +12,7 @@ export default function RegisterPage() {
     const [userDetail, SetUserDetail] = useState('');
     const { login } = useAuth();
     const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const onInputChange = (e) => {
@@ -19,41 +20,50 @@ export default function RegisterPage() {
         SetUserDetail({ ...userDetail, [name]: value });
     }
 
-    const handleRegister = async() => {
+    const handleRegister = async () => {
         // Handle registration logic here
-        if(!userDetail.name || !userDetail.email || !userDetail.password || !selectedFile){
-            if(!userDetail.name){
-                toast.error("Please enter the name");
-            }else if(!userDetail.email){
-                toast.error("Please enter the email");
-            }else if(!userDetail.password){
-                toast.error("Please enter the password");
-            }else if(!selectedFile){ 
-                toast.error("Please select the profile picture");
-            }else{
-                toast.error("Please fill all the fields");
+        setLoading(true);
+        try {
+            if (!userDetail.name || !userDetail.email || !userDetail.password || !selectedFile) {
+                if (!userDetail.name) {
+                    toast.error("Please enter the name");
+                } else if (!userDetail.email) {
+                    toast.error("Please enter the email");
+                } else if (!userDetail.password) {
+                    toast.error("Please enter the password");
+                } else if (!selectedFile) {
+                    toast.error("Please select the profile picture");
+                } else {
+                    toast.error("Please fill all the fields");
+                }
+                setLoading(false);
+                return;
             }
-            return;
-        }
-        
-        const newform = new FormData();
-        newform.append('name', userDetail.name);
-        newform.append('email', userDetail.email);
-        newform.append('password', userDetail.password);
-        newform.append('file', selectedFile);
 
-        const response = await register(newform)
-        if(response){
-            login(response);
-            navigate('/');
+            const newform = new FormData();
+            newform.append('name', userDetail.name);
+            newform.append('email', userDetail.email);
+            newform.append('password', userDetail.password);
+            newform.append('file', selectedFile);
+
+            const response = await register(newform)
+            if (response) {
+                login(response);
+                navigate('/');
+            }
+            setLoading(false);
+            return;
+        }catch (error) {
+            toast.error(error.message);
         }
+        setLoading(false);
     };
 
-    function OnClose(){
+    function OnClose() {
         setOpen(false);
     }
 
-    function OnOpen(){
+    function OnOpen() {
         setOpen(true);
     }
 
@@ -63,12 +73,12 @@ export default function RegisterPage() {
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-80 border flex flex-col items-center gap-5">
                 <div className="avaterDiv border-2 rounded-full border-blue-500 p-1">
                     {/* <Avatar src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar" /> */}
-                    <ProfilePicUploader 
-                    isOpen={open} 
-                    onClose={OnClose} 
-                    onOpen={OnOpen}
-                    selectedFile={selectedFile}
-                    setSelectedFile={setSelectedFile}
+                    <ProfilePicUploader
+                        isOpen={open}
+                        onClose={OnClose}
+                        onOpen={OnOpen}
+                        selectedFile={selectedFile}
+                        setSelectedFile={setSelectedFile}
                     />
                 </div>
                 <div >
@@ -109,6 +119,7 @@ export default function RegisterPage() {
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         type="button"
                         onClick={handleRegister}
+                        loading={loading}
                     >
                         Register
                     </Button>

@@ -50,7 +50,7 @@ export default function Nestedcomments({ commentt }){
 
     return (
         <div className="media flex mb-3 ">
-            <img className="mr-3 rounded-full w-10 h-10" alt="Bootstrap Media Preview" src="https://i.imgur.com/stD0Q19.jpg" />
+            <img className="mr-3 rounded-full w-10 h-10" alt="Bootstrap Media Preview" src={comment?.user?.profileImage} />
             <div className="media-body w-full">
                 <div className="row ">
                     <div className="col-8 flex gap-2 items-center">

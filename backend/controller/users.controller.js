@@ -128,6 +128,7 @@ async function logoutUser(req, res){
         const token = req?.cookies?.accessToken;
         
         if (!token) {
+            res.setHeader('Authorization', `Bearer ${null}`);
             return res.status(404).json({ message: "You are not loggedIn" , logout : true});
         }
 

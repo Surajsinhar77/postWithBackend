@@ -56,7 +56,7 @@ export default function Childcomment({ comment, re = true }) {
 
     return (
         <div className="media mt-4 flex">
-            <img className="rounded-full w-10 h-10" alt="Bootstrap Media Another Preview" src="https://i.imgur.com/xELPaag.jpg" />
+            <img className="rounded-full w-10 h-10" alt="Bootstrap Media Another Preview" src={commentt?.user?.profileImage} />
             <div className="media-body w-full">
                 <div className="row ml-3">
                     <div className="col-12 flex gap-2 items-center">

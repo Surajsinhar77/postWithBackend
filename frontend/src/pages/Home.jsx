@@ -5,6 +5,7 @@ import api from '../common/api/AuthApi';
 import Postmodal from '../components/Postmodal';
 import axios from 'axios';
 import params from '../common/params';
+import { toast } from 'react-toastify';
 
 
 export default function Home() {
@@ -25,6 +26,7 @@ export default function Home() {
 
     useEffect(() => {
         GetAllPostsAndComments();
+        toast.success("Welcome to the Home Page");
     }, []);
 
     return (
