@@ -15,5 +15,5 @@ router.get('/getPostById/:id', getPostById);
 router.post('/addNewPost',uploadPostMiddleware , addNewPost);
 router.put('/updatePostById/:id', updatePostById);
 router.delete('/delPostById/:id', delPostById);
-
+// router.post('/contact')
 module.exports = router;

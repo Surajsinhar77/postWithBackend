@@ -11,7 +11,7 @@ export default function ContactPage() {
     e.preventDefault()
     try {
       //data bhej rhe backend ko 
-     const response = await axios.post("apiadd krna hai " , name,email,message)
+     const response = await axios.post('/contact' , name,email,message)
      console.log(response.data) // handle sucess response
       
     } catch (error) {
