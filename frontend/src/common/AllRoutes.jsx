@@ -9,6 +9,7 @@ import PageNotFound from '../pages/PageNotFound';
 import ContactPage from '../pages/ContactPage';
 import AboutPage from '../pages/AboutPage';
 import Navbar from '../components/Navbar';
+import Profile from '../components/Profile';
 
 export default function AllRoutes() {
   const { user } = useAuth();
@@ -19,6 +20,7 @@ export default function AllRoutes() {
             <Route exact path='/' element={<Home />} />
             <Route path='/ContactPage' element={ <ContactPage/> } />
             <Route path='/aboutpage' element={<AboutPage/>}/>
+            <Route path='/profile' element={<Profile/>} />
           </>
         :
         <>

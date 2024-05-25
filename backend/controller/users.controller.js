@@ -1,11 +1,19 @@
 const usersModel = require('../model/users.model.js');
 const bcrypt = require('bcrypt');
 const serviceAuth = require('../service/serviceAuth.js');
+const {z} = require('zod');
+
+const userData = z.object({
+    name: z.string().min(3).max(50) ,// i want this option to be required because userData can be use in login also so i want to make it optional
+    email: z.string().email(),
+    password: z.string().min(6).max(50),
+});
 
 async function signUpUser(req, res){
     try {
-	    const { name, email, password } = req.body;
-        const isUserExist = await usersModel.findOne({email: email});
+	    // const { name, email, password } = req.body;
+        const validateData = userData.parse(req.body);
+        const isUserExist = await usersModel.findOne({email: validateData?.email});
 
         if (isUserExist) {
             res.clearCookie('accessToken');
@@ -19,7 +27,7 @@ async function signUpUser(req, res){
         const authToken = req?.cookies?.accessToken;
 
         if(!authToken){
-            const hashPassword = await bcrypt.hash(password, 10);
+            const hashPassword = await bcrypt.hash(validateData?.password, 10);
 
             if(!req?.cloudinaryUrl){
                 console.log(req.cloudinaryUrl)
@@ -28,15 +36,15 @@ async function signUpUser(req, res){
             }
             
             const user = await usersModel.create({
-                name,
-                email,
+                name : validateData?.name,
+                email : validateData?.email,
                 password : hashPassword,
                 profileImage : req.cloudinaryUrl,
             });
 
             const token = serviceAuth.createUserToken({ id: user._id, email: user.email });
             
-            const updateUserToken = await usersModel.findOneAndUpdate({ email: email }, { $set: {token: token} }, { new: true })
+            const updateUserToken = await usersModel.findOneAndUpdate({ email: validateData.email }, { $set: {token: token} }, { new: true })
 
             const options = {
                 httpOnly: true,
@@ -64,10 +72,17 @@ async function signUpUser(req, res){
     }
 };
 
+const userLoginData = z.object({
+    email: z.string().email(),
+    password: z.string().min(6).max(50),
+
+});
+
 async function loginUser(req, res){
     try {
-	    const { email, password } = req.body;
-        const userExist = await usersModel.findOne({ email: email });
+	    // const { email, password } = req.body;
+        const validateData = userData.parse(req.body);
+        const userExist = await usersModel.findOne({ email: validateData?.email });
         if (!userExist) {
             res.clearCookie('accessToken');
             res.setHeader('Authorization', `Bearer ${null}`);
@@ -76,11 +91,11 @@ async function loginUser(req, res){
 
         const authToken = req?.cookies?.accessToken;
         if (!authToken) {
-            const userExistInfo = await bcrypt.compare(password, userExist.password);
+            const userExistInfo = await bcrypt.compare(validateData.password, userExist.password);
             if (userExistInfo) {
                 const token = serviceAuth.createUserToken({ id: userExist._id, email: userExist.email });
 
-                const updateToken = await usersModel.findOneAndUpdate({ email: email }, { token: token }, { new: true } ).select('-password -__v');
+                const updateToken = await usersModel.findOneAndUpdate({ email: validateData.email }, { token: token }, { new: true } ).select('-password -__v');
                
                 const options = {
                     httpOnly: true,
